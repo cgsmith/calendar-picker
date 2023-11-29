@@ -1,0 +1,44 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Contact;
+use App\Models\Service;
+use App\Models\ServiceQuestion;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Appointment>
+ */
+class AppointmentFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        // start with blank description
+        $description = '';
+
+        /** @var Service $service */
+        $service = Service::inRandomOrder()->first();
+
+        /** @var ServiceQuestion $question */
+        foreach ($service->questions() as $question) {
+            $description .= '<strong>' . $question->question . '</strong><br/>';
+            $description .= fake()->text . '<br/><br/><br/>';
+        }
+
+        return [
+            'description' => $description,
+            'start' => fake()->dateTime(),
+            'end' => fake()->dateTime(),
+            'contact_id' => Contact::inRandomOrder()->first()->id,
+            'user_id' => User::inRandomOrder()->first()->id,
+            'service_id' => $service->id,
+        ];
+    }
+}
