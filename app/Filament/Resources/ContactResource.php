@@ -24,17 +24,31 @@ class ContactResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    public static function getModelLabel(): string
+    {
+        return __('Contact');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Contacts');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->autofocus()
+                    ->translateLabel(),
                 TextInput::make('email')
                     ->required()
-                    ->email(),
+                    ->email()
+                    ->translateLabel(),
                 TextInput::make('phone')
-                    ->tel(),
+                    ->tel()
+                    ->translateLabel(),
             ]);
     }
 
@@ -43,10 +57,13 @@ class ContactResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->translateLabel(),
                 TextColumn::make('email')
-                    ->searchable(),
-                TextColumn::make('phone'),
+                    ->searchable()
+                    ->translateLabel(),
+                TextColumn::make('phone')
+                    ->translateLabel(),
             ])
             ->filters([
                 //

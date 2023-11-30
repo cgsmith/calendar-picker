@@ -20,7 +20,8 @@ class ServiceFactory extends Factory
             'name' => fake()->streetName(),
             'description' => fake()->text(),
             'duration' => fake()->randomElement([15,30,90,120]),
-            'minimum_cancel_hours' => fake()->randomElement([null,2,4,8,24])
+            'minimum_cancel_hours' => fake()->randomElement([null,2,4,8,24]),
+            'active' => fake()->boolean(80),
         ];
     }
 }

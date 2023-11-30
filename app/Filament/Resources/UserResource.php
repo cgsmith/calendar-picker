@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Service;
 use App\Models\User;
 use Faker\Provider\Text;
 use Filament\Forms;
@@ -20,11 +21,25 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    public static function getModelLabel(): string
+    {
+        return __('User');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Users');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name'),
+                Forms\Components\TextInput::make('email'),
+                Forms\Components\TextInput::make('locale'),
+                Forms\Components\FileUpload::make('picture')
+                    ->helperText(__('300px x 300px png is recommended')),
             ]);
     }
 
@@ -34,7 +49,8 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('picture'),
+                Tables\Columns\ImageColumn::make('picture')
+                    ->circular()
             ])
             ->filters([
                 //
@@ -52,7 +68,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ServicesRelationManager::class
         ];
     }
 

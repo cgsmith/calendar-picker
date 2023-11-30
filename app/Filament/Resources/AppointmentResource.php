@@ -2,24 +2,32 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Status;
 use App\Filament\Resources\AppointmentResource\Pages;
 use App\Filament\Resources\AppointmentResource\RelationManagers;
 use App\Filament\Resources\AppointmentResource\Widgets\AppointmentOverview;
 use App\Models\Appointment;
-use Faker\Provider\Text;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AppointmentResource extends Resource
 {
     protected static ?string $model = Appointment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
+
+    public static function getModelLabel(): string
+    {
+        return __('Appointment');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Appointments');
+    }
 
     public static function form(Form $form): Form
     {
@@ -40,19 +48,43 @@ class AppointmentResource extends Resource
                         Forms\Components\TextInput::make('phone')
                             ->label('Phone number')
                             ->tel(),
-                    ]),
-                Forms\Components\TextInput::make('description')
-                    ->required(),
+                    ])
+                    ->translateLabel(),
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required(),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Email address')
+                            ->email()
+                            ->required(),
+                        Forms\Components\TextInput::make('phone')
+                            ->label('Phone number')
+                            ->tel(),
+                    ])
+                    ->translateLabel(),
+                Forms\Components\RichEditor::make('description')
+                    ->toolbarButtons([
+                        'bold', 'italic', 'redo', 'undo'
+                    ])
+                    ->columnSpanFull()
+                    ->required()
+                    ->translateLabel(),
                 Forms\Components\DateTimePicker::make('start')
                     ->seconds(false)
                     ->native(false)
                     ->required()
-                    ->minDate(now()),
+                    ->translateLabel(),
                 Forms\Components\DateTimePicker::make('end')
                     ->seconds(false)
                     ->native(false)
+                    ->after('start')
                     ->required()
-                    ->minDate(now()),
+                    ->translateLabel(),
             ]);
     }
 
@@ -60,15 +92,28 @@ class AppointmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('contact.name'),
+                Tables\Columns\TextColumn::make('contact.name')
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('start')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('end')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(Status::class)
+                    ->translateLabel()
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'past' => __('Past'),
+                        'today' => __('Today'),
+                        'upcoming' => __('Upcoming'),
+                    ])
+                    ->translateLabel()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

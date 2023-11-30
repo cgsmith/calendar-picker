@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('description');
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->string('status');
             $table->foreignId('contact_id')->constrained('contacts')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('service_id')->constrained('services')->restrictOnDelete();

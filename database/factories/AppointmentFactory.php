@@ -27,18 +27,19 @@ class AppointmentFactory extends Factory
         $service = Service::inRandomOrder()->first();
 
         /** @var ServiceQuestion $question */
-        foreach ($service->questions() as $question) {
+        foreach ($service->questions as $question) {
             $description .= '<strong>' . $question->question . '</strong><br/>';
             $description .= fake()->text . '<br/><br/><br/>';
         }
 
         return [
             'description' => $description,
-            'start' => fake()->dateTime(),
-            'end' => fake()->dateTime(),
+            'start' => fake()->dateTime()->setDate(date('Y'), date('m'), rand(1,28)),
+            'end' => fake()->dateTime()->setDate(date('Y'), date('m'), rand(1,28)),
             'contact_id' => Contact::inRandomOrder()->first()->id,
             'user_id' => User::inRandomOrder()->first()->id,
             'service_id' => $service->id,
+            'status' => fake()->randomElement(['today', 'upcoming', 'past'])
         ];
     }
 }

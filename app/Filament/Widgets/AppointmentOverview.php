@@ -12,11 +12,19 @@ class AppointmentOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Appointments Today',
+            Stat::make(__('Total Appointments Today'),
                 Appointment::query()
                     ->whereDate('start', Carbon::today())
                     ->count()
-            )
+                )
+                ->icon('heroicon-o-user-group'),
+            Stat::make(__('Your Appointments Today'),
+                Appointment::query()
+                    ->whereDate('start', Carbon::today())
+                    ->where('user_id', auth()->user()->id)
+                    ->count()
+                )
+                ->icon('heroicon-o-user'),
         ];
     }
 }

@@ -13,9 +13,7 @@ class Localization
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $allowedLanguages = ['en', 'de'];
-
-        if (($language = $request->get('lang')) && in_array($language, $allowedLanguages)) {
+        if (($language = $request->get('lang')) && in_array($language, config('app.available_locales'))) {
             // a valid language is sent in the querystring - set it in the session for future use
             $request->session()->put('language', $language);
         } else {
