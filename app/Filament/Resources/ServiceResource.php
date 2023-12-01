@@ -43,10 +43,20 @@ class ServiceResource extends Resource
                     ->fileAttachmentsVisibility('public')
                     ->columnSpanFull()
                     ->translateLabel(),
+                Forms\Components\Toggle::make('allow_user_selection'),
+                Forms\Components\Toggle::make('all_day')
+                    ->requiredWith('duration')
+                    ->reactive()
+                    ->afterStateUpdated(
+                        fn ($state, callable $set) => $state ? $set('duration', null) : $set('duration', 'hidden')
+                    ),
                 Forms\Components\TextInput::make('duration')
                     ->numeric()
+                    ->requiredWith('all_day')
                     ->helperText(__('Default duration of appointment'))
-                    ->required()
+                    ->required()->hidden(
+                        fn ($get): bool => $get('all_day') == true
+                    )
                     ->translateLabel(),
                 Forms\Components\TextInput::make('minimum_cancel_hours')
                     ->numeric()
@@ -67,11 +77,7 @@ class ServiceResource extends Resource
                     ->translateLabel(),
                 Tables\Columns\TextColumn::make('minimum_cancel_hours')
                     ->translateLabel(),
-                Tables\Columns\IconColumn::make('active')
-                    ->icon(fn (int $state): string => match ($state) {
-                        0 => 'heroicon-o-no-symbol',
-                        1 => 'heroicon-o-check',
-                    })
+                Tables\Columns\ToggleColumn::make('active')
                     ->translateLabel(),
             ])
             ->filters([
@@ -92,6 +98,7 @@ class ServiceResource extends Resource
         return [
                 RelationManagers\QuestionsRelationManager::class,
                 RelationManagers\TimesRelationManager::class,
+                RelationManagers\UsersRelationManager::class,
         ];
     }
 

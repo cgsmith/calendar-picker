@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AppointmentController::class, 'index']);
+Route::get('/appointment/service/{id}', [AppointmentController::class, 'service']);
+Route::get('/appointment/service/{id}/{userId}', [AppointmentController::class, 'datetimepicker']);
+Route::get('/appointment/service/{id}/{userId}/{unixTimestamp}', [AppointmentController::class, 'datetimepicker']);

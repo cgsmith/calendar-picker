@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->integer('duration');
+            $table->integer('duration')->nullable();
+            $table->boolean('all_day');
             $table->integer('minimum_cancel_hours')->nullable(); // null means cancelling not allowed
+            $table->boolean('allow_user_selection');
             $table->boolean('active');
             $table->timestamps();
         });

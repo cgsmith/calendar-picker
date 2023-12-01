@@ -37,7 +37,9 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name'),
                 Forms\Components\TextInput::make('email'),
-                Forms\Components\TextInput::make('locale'),
+                Forms\Components\TextInput::make('maximum_appointments_per_day'),
+                Forms\Components\Select::make('locale')
+                    ->options(config('app.available_locales')),
                 Forms\Components\FileUpload::make('picture')
                     ->helperText(__('300px x 300px png is recommended')),
             ]);

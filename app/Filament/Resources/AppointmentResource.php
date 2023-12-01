@@ -67,6 +67,13 @@ class AppointmentResource extends Resource
                             ->tel(),
                     ])
                     ->translateLabel(),
+                Forms\Components\Select::make('service_id')
+                    ->relationship('service', 'name')
+                    ->searchable()
+                    ->columnSpanFull()
+                    ->preload()
+                    ->required()
+                    ->translateLabel(),
                 Forms\Components\RichEditor::make('description')
                     ->toolbarButtons([
                         'bold', 'italic', 'redo', 'undo'
