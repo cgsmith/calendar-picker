@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\User;
 use App\Services\AppointmentService;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class AppointmentController extends Controller
@@ -17,9 +18,17 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function service(int $id, int $unixTimestamp = 0): View
+    public function service(int $id, int $unixTimestamp = 0): View|RedirectResponse
     {
         $service = Service::where('active', 1)->where('id', $id)->first();
+
+        if ($service->allow_user_selection === false || count($service->users) == 1) {
+            return redirect()->action([AppointmentController::class, 'datetimepicker'], [
+                'id' => $service->id,
+                'userId' => $service->users()->first()->id,
+                'unixTimestamp' => 0
+            ]);
+        }
         $availableTimes = AppointmentService::availableDatetimes($service, $unixTimestamp);
 
         return view('appointment.service', [

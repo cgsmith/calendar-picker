@@ -2,6 +2,10 @@
 
 @section('content')
 
+@push('head-scripts')
+    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+@endpush
+
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 @endpush
@@ -22,16 +26,29 @@
         <div class="flex">
             <div>
                 <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Pretend I am a calendar</h2>
-                @foreach($availableTimes as $userid => $userTimes)
-                    @foreach($userTimes as $time)
-                    <p><a
-                            class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
-                            href="/appointment/service/{{$service->id}}/{{$userid}}/{{$time->date->format('U')}}{{ $confirm }}">
-                            {{ $time->date->format($format) }}
-                        </a
-                        ></p>
-                    @endforeach
-                @endforeach
+                <input id="datepicker"/>
+                <script>
+                    const allowedDates = [
+                        @foreach($availableTimes as $userid => $userTimes)
+                            @foreach($userTimes as $time)
+                                '{{ $time->date->format('Y-m-d') }}',
+                            @endforeach
+                        @endforeach
+                    ]
+                    const picker = new easepick.create({
+                        element: document.getElementById('datepicker'),
+                        css: [
+                            'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                        ],
+                        plugins: ['LockPlugin'],
+                        LockPlugin: {
+                            filter(date, picked) {
+                                return !allowedDates.includes(date.format('YYYY-MM-DD'));
+                            },
+                        },
+                    });
+                </script>
+
             </div>
 
         </div>
