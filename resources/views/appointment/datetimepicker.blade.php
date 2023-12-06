@@ -14,19 +14,17 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 
         <div class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-            <div>
+            <div class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                 <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">{{ $title }}</h2>
-                <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{{ $service->description }}</p>
+                {!! $service->description !!}
             </div>
 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="self-center shrink-0 stroke-red-500 w-6 h-6 mx-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-            </svg>
         </div>
         <div class="flex">
             <div>
-                <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Pretend I am a calendar</h2>
-                <input id="datepicker"/>
+                <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">What would you like to have the repair done?</h2>
+                <p class="text-gray-500">This is when the workshop will repair the bike, we would like to have the bike the day before.</p>
+                <input id="datepicker" type="hidden"/>
                 <script>
                     const allowedDates = [
                         @foreach($availableTimes as $userid => $userTimes)
@@ -37,8 +35,14 @@
                     ]
                     const picker = new easepick.create({
                         element: document.getElementById('datepicker'),
+                        firstDay: 0,
+                        inline: true,
+                        calendars: 2,
+                        lang: 'de',
                         css: [
                             'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                            '{{asset('css/calendar.css')}}',
+
                         ],
                         plugins: ['LockPlugin'],
                         LockPlugin: {
@@ -47,9 +51,12 @@
                             },
                         },
                     });
+                    picker.on('select', (e) => {
+                       const date = new Date(e.detail.date);
+                       const redirectUrl = '{{ url("/appointment/service/{$service->id}/{$userid}") }}/' + date.getTime()/1000 + '/confirm';
+                       window.location.replace(redirectUrl);
+                    });
                 </script>
-
-            </div>
 
         </div>
 

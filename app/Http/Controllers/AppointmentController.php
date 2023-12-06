@@ -41,10 +41,6 @@ class AppointmentController extends Controller
     public function userpicker(int $id, int $unixTimestamp) {
         $service = Service::where('active', 1)->where('id', $id)->first();
 
-        if ($service->hasOneUser()) {
-            redirect();
-        }
-
         $availableUsers = AppointmentService::availableDatetimes($service, $unixTimestamp);
 
         $title = $service->name . ' - ' . Carbon::createFromFormat('U', $unixTimestamp)->format('l M jS');
@@ -66,10 +62,28 @@ class AppointmentController extends Controller
 
         return view('appointment.datetimepicker', [
             'service' => $service,
+            'userid' => $service->users()->first()->id,
             'availableTimes' => $availableTimes,
             'title' => $title,
             'confirm' => '', // no confirm url
             'format' => $format,
+        ]);
+    }
+
+    public function confirm(int $id, int $userid, int $unixTimestamp)
+    {
+        // build questions for service
+        $service = Service::where('active',1)->where('id',$id)->first();
+
+        $questions = $service->questions;
+
+        // Create draft appointment - this will lock in the appointmnet - we can delete drafts after a certain amount of time
+        return view('appointment.confirm', [
+            'service' => $service,
+            'title' => 'Confirm your appt for ' . $unixTimestamp,
+            'userid' => $userid,
+            'unixTimestamp' => $unixTimestamp,
+            'questions' => $questions,
         ]);
     }
 

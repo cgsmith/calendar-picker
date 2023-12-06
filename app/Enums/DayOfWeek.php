@@ -14,7 +14,6 @@ enum DayOfWeek: int implements HasLabel
     case Friday = 5;
     case Saturday = 6;
 
-
     public function getLabel(): ?string
     {
         return match ($this) {

@@ -43,7 +43,6 @@ class TimesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('day_of_week')
             ->columns([
                 Tables\Columns\TextColumn::make('day_of_week')
                     ->translateLabel(),

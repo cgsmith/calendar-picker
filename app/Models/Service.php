@@ -27,6 +27,9 @@ class Service extends Model
 
     public function times(): HasMany
     {
-        return $this->hasMany(ServiceTimes::class);
+        return $this->hasMany(ServiceTimes::class)
+            ->orderBy('day_of_week', 'asc')
+            ->orderBy('hour', 'asc')
+            ->orderBy('minute', 'asc');
     }
 }
