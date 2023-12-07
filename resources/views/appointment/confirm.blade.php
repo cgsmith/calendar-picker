@@ -1,32 +1,80 @@
 @extends('layouts/app')
 
 @section('content')
+    <div class="mt-16">
+        <form id="confirmForm" method="POST" action="/confirm">
+            @csrf
+            <div class="space-y-12">
+                <div class="border-b border-white/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-white">{{$title}}</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-400">{{ __('We need a little more information to schedule your appointment. All fields are required.') }}</p>
+                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div class="sm:col-span-2">
+                            <label for="name"
+                                   class="block text-sm font-medium leading-6 text-white">{{__('Name')}}</label>
+                            <div class="mt-2">
+                                <div
+                                    class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+                                    <input type="text" name="name" id="name" autocomplete="name" required
+                                           class="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"
+                                           placeholder="{{__('John Doe')}}">
+                                </div>
+                            </div>
+                        </div>
 
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-@endpush
-<div class="mt-16">
+                        <div class="col-span-2">
+                            <label for="email"
+                                   class="block text-sm font-medium leading-6 text-white">{{__('Email')}}</label>
+                            <div class="mt-2">
+                                <div
+                                    class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+                                    <input type="email" name="email" id="email" autocomplete="email" required
+                                           class="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"
+                                           placeholder="{{__('john@example.com')}}">
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="flex">
-            <div class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex focus:outline focus:outline-2 focus:outline-red-500">
-                <div>
-                    <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">{{ $title }}</h2>
-                    <form method="POST" action="/confirm">
-                        @csrf
-
-                    </form>
-                    Name: <input type="text">
-                    @foreach($questions as $question)
-                        <p class="dark:text-white ">{{$question->question}}</p>
-                        <input type="text" />
-                    @endforeach
-                    <button>Confirm</button>
+                        <div class="col-span-2">
+                            <label for="phone"
+                                   class="block text-sm font-medium leading-6 text-white">{{__('Phone')}}</label>
+                            <div class="mt-2">
+                                <div
+                                    class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+                                    <input type="text" name="phone" id="phone" autocomplete="phone" required
+                                           class="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                {!! \App\Services\FormService::render($questions) !!}
+
+                <input type="hidden" name="service_id" value="{{$service->id}}">
+                <input type="hidden" name="user_id" value="{{$userid}}">
+                <input type="hidden" name="start" value="{{$start}}">
+                <input type="hidden" name="end" value="{{$end}}">
+                <div class="mt-10 space-y-10">
+                    <div class="mt-6 space-y-6">
+                        <div class="relative flex gap-x-3">
+                            <div class="flex h-6 items-center">
+                                <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
+                            </div>
+                            <div class="text-sm leading-6">
+                                <label for="terms" class="font-medium text-white">{!! $service->terms !!} </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="submit"
+                            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">{{__('Book Appointment')}}</button>
+                </div>
             </div>
+        </form>
 
-        </div>
-
-</div>
+    </div>
 
 @endsection

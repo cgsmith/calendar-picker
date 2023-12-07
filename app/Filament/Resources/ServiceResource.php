@@ -37,11 +37,31 @@ class ServiceResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->columnSpanFull()
                     ->translateLabel(),
                 Forms\Components\RichEditor::make('description')
                     ->required()
+                    ->toolbarButtons([
+                        'attachFiles',
+                        'bold',
+                        'bulletList',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'underline',
+                    ])
                     ->fileAttachmentsVisibility('public')
-                    ->columnSpanFull()
+                    ->translateLabel(),
+                Forms\Components\RichEditor::make('terms')
+                    ->hint(__('Displays as a required checkbox at the end of the appointment form.'))
+                    ->toolbarButtons([
+                        'bold',
+                        'bulletList',
+                        'italic',
+                        'link',
+                    ])
                     ->translateLabel(),
                 Forms\Components\Toggle::make('allow_user_selection'),
                 Forms\Components\Toggle::make('all_day')

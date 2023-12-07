@@ -21,8 +21,10 @@ class ServiceQuestionFactory extends Factory
         return [
             'service_id' => $service->id,
             'question' => fake()->text(),
+            'hint' => fake()->text(),
             'type' => fake()->randomElement(['text','textarea','option','checkbox']),
-            'type_meta' => '[{value: "element-1", description: "This is the first element"}, {value: "element-2", description: "This is the first element"}]',
+            'type_meta' => [fake()->text(10), fake()->text(5), fake()->text(15)],
+            'order' => rand(0,100),
             'required' => fake()->boolean()
         ];
     }

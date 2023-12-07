@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('all_day');
             $table->integer('minimum_cancel_hours')->nullable(); // null means cancelling not allowed
             $table->boolean('allow_user_selection');
+            $table->string('terms')->nullable();
             $table->boolean('active');
             $table->timestamps();
         });

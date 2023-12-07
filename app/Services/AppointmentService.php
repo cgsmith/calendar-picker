@@ -5,11 +5,12 @@ namespace App\Services;
 use App\Models\Appointment;
 use App\Models\Availability;
 use App\Models\Service;
+use App\Models\ServiceQuestion;
 use App\Models\ServiceTimes;
 use App\Models\User;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
-use Symfony\Component\ErrorHandler\Debug;
+use Illuminate\Http\Request;
 
 class AppointmentService
 {
@@ -90,6 +91,18 @@ class AppointmentService
         }
 
         return $availabilities;
+    }
+
+    public static function buildDescription(Request $request)
+    {
+        $description = '<ul>';
+        foreach ($request->questions as $questionKey => $questionMeta) {
+            $question = ServiceQuestion::find($questionKey);
+            $meta = strip_tags($questionMeta);
+            //var_dump($questionKey);die;
+            $description .= "<li>{$question->question}</li><ul><li>{$meta}</li></ul>";
+        }
+        return $description . '</ul>';
     }
 
     protected function getAvailableDays()

@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->string('question');
+            $table->string('hint')->nullable();
             $table->string('type');
             $table->text('type_meta')->nullable()->comment('Used if type is dropdown, radio, or checkbox');
+            $table->tinyInteger('order');
             $table->boolean('required');
             $table->timestamps();
         });

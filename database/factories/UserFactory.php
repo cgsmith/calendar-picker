@@ -20,11 +20,6 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $picture = null;
-
-        if (1 === rand(1, 2)) {
-            $picture = fake()->image(dir: storage_path('app'), width: 250, height: 250, fullPath: false);
-        }
         return [
             'name' => fake()->name(),
             'email' => fake()->firstName . '@mount7.com',
@@ -32,7 +27,6 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'locale' => fake()->randomElement(['en', 'de']),
             'remember_token' => Str::random(10),
-            'picture' => $picture,
         ];
     }
 

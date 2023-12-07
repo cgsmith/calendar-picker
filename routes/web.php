@@ -19,3 +19,4 @@ Route::get('/appointment/service/{id}', [AppointmentController::class, 'service'
 Route::get('/appointment/service/{id}/{userId}', [AppointmentController::class, 'datetimepicker']);
 Route::get('/appointment/service/{id}/{userId}/{unixTimestamp}', [AppointmentController::class, 'datetimepicker']);
 Route::get('/appointment/service/{id}/{userId}/{unixTimestamp}/confirm', [AppointmentController::class, 'confirm']);
+Route::post('/confirm', [AppointmentController::class, 'thankyou']);

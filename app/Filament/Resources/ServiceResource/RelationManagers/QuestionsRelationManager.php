@@ -23,10 +23,28 @@ class QuestionsRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255)
                     ->translateLabel(),
+
                 Forms\Components\Select::make('type')
+                    ->translateLabel()
                     ->options(QuestionType::class),
-                Forms\Components\Toggle::make('required')
+
+                Forms\Components\TextInput::make('hint')
+                    ->hint(__('Displays below the question to provide additional context'))
+                    ->columnSpanFull()
+                    ->maxLength(255)
                     ->translateLabel(),
+
+                Forms\Components\Toggle::make('required')
+                    ->columnSpanFull()
+                    ->translateLabel(),
+                Forms\Components\Hidden::make('order')->default(99),
+                Forms\Components\Repeater::make('type_meta')
+                    ->columnSpanFull()
+                    ->hint(__('These options appear for types: checkbox, dropdown, radio'))
+                    ->simple(Forms\Components\TextInput::make('value'))
+                    ->default([])
+                    ->addActionLabel(__('Add Option'))
+                    ->reorderableWithButtons(),
             ]);
     }
 
@@ -34,8 +52,12 @@ class QuestionsRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('question')
+            ->reorderable('order')
+            ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('question'),
+                Tables\Columns\TextColumn::make('type')->badge(),
+                Tables\Columns\TextColumn::make('type_meta'),
             ])
             ->filters([
                 //

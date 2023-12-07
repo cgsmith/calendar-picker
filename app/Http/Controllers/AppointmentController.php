@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ServiceTimeType;
+use App\Enums\Status;
+use App\Models\Appointment;
+use App\Models\Contact;
 use App\Models\Service;
+use App\Models\ServiceTimes;
 use App\Models\User;
 use App\Services\AppointmentService;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -72,19 +78,83 @@ class AppointmentController extends Controller
 
     public function confirm(int $id, int $userid, int $unixTimestamp)
     {
-        // build questions for service
+        /** @var $service Service */
         $service = Service::where('active',1)->where('id',$id)->first();
+        if ($service->all_day) {
+            $date = Carbon::createFromFormat('U', $unixTimestamp);
 
-        $questions = $service->questions;
+            /**
+             * Get date from service time that matches selected day of week
+             *
+             * @var $dayOfWeekStartTime ServiceTimes
+             * @var $dayOfWeekEndTime ServiceTimes
+             */
+            $dayOfWeekStartTime = $service
+                ->times()
+                ->where('day_of_week', '=', $date->format('w'))
+                ->where('type', '=', ServiceTimeType::Start)
+                ->first();
+            $dayOfWeekEndTime = $service
+                ->times()
+                ->where('day_of_week', '=', $date->format('w'))
+                ->where('type', '=', ServiceTimeType::End)
+                ->first();
+
+            // If dayOfWeek not found (for some reason) just use the current time that was passed through
+            if (is_null($dayOfWeekStartTime) || is_null($dayOfWeekEndTime)) {
+                $start = $unixTimestamp;
+                $end = $unixTimestamp;
+            } else{
+                $start = clone $date->setHour($dayOfWeekStartTime->hour)->setMinute($dayOfWeekStartTime->minute);
+                $end = clone $date->setHour($dayOfWeekEndTime->hour)->setMinute($dayOfWeekEndTime->minute);
+            }
+        }
+
 
         // Create draft appointment - this will lock in the appointmnet - we can delete drafts after a certain amount of time
         return view('appointment.confirm', [
             'service' => $service,
-            'title' => 'Confirm your appt for ' . $unixTimestamp,
+            'title' => $service->name .': '. __("let's gather a little more information"),
             'userid' => $userid,
-            'unixTimestamp' => $unixTimestamp,
-            'questions' => $questions,
+            'start' => $start->format('U'),
+            'end' => $end->format('U'),
+            'questions' => $service->questions,
         ]);
+    }
+
+    public function thankyou(\Illuminate\Http\Request $request)
+    {
+        if ($request->isMethod('post')) {
+            // get form data
+            $contact = Contact::updateOrCreate(
+                ['email' => $request->email],
+                ['name' => $request->name,'phone' => $request->phone]
+            );
+
+            // validate service_id
+            $service = Service::find($request->service_id);
+            $user = User::find($request->user_id);
+
+            $start = Carbon::createFromFormat('U', $request->start);
+            $end = Carbon::createFromFormat('U', $request->end);
+
+            // description build out HTML for saving on the appointment
+            $description = AppointmentService::buildDescription($request);
+
+            $appointment = Appointment::create([
+                'contact_id' => $contact->id,
+                'service_id' => $service->id,
+                'user_id' => $user->id,
+                'description' => $description,
+                'status' => Status::Upcoming,
+                'start' => $start,
+                'end' => $end,
+            ]);
+
+            return view ('appointment.thankyou', [
+                'appointment' => $appointment
+            ]);
+        }
     }
 
 }

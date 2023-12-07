@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Service;
 use App\Models\ServiceQuestion;
+use App\Models\ServiceTimes;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class ServiceSeeder extends Seeder
@@ -16,7 +18,16 @@ class ServiceSeeder extends Seeder
         Service::factory()
             ->count(5)
             ->create();
+
+        // seed users with belongsToMany relation
+        foreach (Service::all() as $service) {
+            $service->users()->attach(rand(1,5));
+        }
+
         ServiceQuestion::factory()
+            ->count(5)
+            ->create();
+        ServiceTimes::factory()
             ->count(5)
             ->create();
     }
