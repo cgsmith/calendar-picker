@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
             'email_verified_at' => '2000-10-01',
             'password' => Hash::make('1234'),
             'remember_token' => 1,
+            'maximum_appointments_per_day' => 1,
         ]);
     }
 }
