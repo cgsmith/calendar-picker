@@ -27,6 +27,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'locale' => fake()->randomElement(['en', 'de']),
             'remember_token' => Str::random(10),
+            'maximum_appointments_per_day' => rand(1, 3),
         ];
     }
 

@@ -28,10 +28,12 @@ class AppointmentController extends Controller
     {
         $service = Service::where('active', 1)->where('id', $id)->first();
 
-        if ($service->allow_user_selection == false || count($service->users) === 1) {
+        $userCount = $service->users()->count() === 1;
+        if (!$service->allow_user_selection || $userCount) {
+            $userid = ($userCount) ? $service->users()->first()->id : 0;
             return redirect()->action([AppointmentController::class, 'datetimepicker'], [
                 'id' => $service->id,
-                'userId' => $service->users()->first()->id,
+                'userId' => $userid,
                 'unixTimestamp' => 0
             ]);
         }

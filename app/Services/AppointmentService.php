@@ -8,7 +8,6 @@ use App\Models\Service;
 use App\Models\ServiceQuestion;
 use App\Models\ServiceTimes;
 use App\Models\User;
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -43,52 +42,43 @@ class AppointmentService
 
         // get specific user or get all users
         $users = ($userid) ? User::where('id', $userid)->get() : $service->users()->get();
-        $serviceDaytimes = $service->times()->get();
-        Debugbar::debug($serviceDaytimes);
+        $maxApptPerDay = $users->sum('maximum_appointments_per_day');
         // look ahead days
-        foreach ($users as $user) {
             // calculate out availability days
 
             //
 
             // tests
             if ($date) {
-                for ($i = 1; $i < 11; $i++) {
-                    $availability = new Availability();
-                    $availability->user = $user;
-                    $availability->date = Carbon::create(2023, 12, 1, $i, rand(0,59));
-                    $availabilities[$user->id][] = $availability;
-                }
             } else {
-                $maxPerDay = $user->maximum_appointments_per_day;
+                $minimumLookaheadDate = 0; // how far to start looking ahead
                 $maxLookaheadDate = 60;
-                for ($i = 0; $i <= $maxLookaheadDate; $i++) {
+                for ($i = $minimumLookaheadDate; $i <= ($maxLookaheadDate + $minimumLookaheadDate); $i++) {
                     $startDate = Carbon::now();
                     $startDate->add('day', $i);
                     $appointmentCount = Appointment::query()
                         ->whereRaw('DATE(start) = "' . $startDate->format('Y-m-d') . '"')
-                        ->where('user_id', $user->id)
+                        ->whereIn('user_id', $users->modelKeys())
                         ->count();
 
                     // does date fall within hours in service times?
 
                     // if the appt count is less than maximum per day
-                    if ($appointmentCount < $maxPerDay) {
-
+                    if ($appointmentCount < $maxApptPerDay) {
                         $serviceCount = ServiceTimes::query()
                             ->where('service_id', $service->id)
                             ->where('day_of_week', $startDate->format('w')  )
                             ->count();
                         if ($serviceCount > 0) {
                             $availability = new Availability();
-                            $availability->user = $user;
+                            $availability->user = $userid;
                             $availability->date = Carbon::createFromFormat('Y-m-d',$startDate->format('Y-m-d'));
-                            $availabilities[$user->id][] = $availability;
+                            $availabilities[] = $availability;
                         }
                     }
                 }
             }
-        }
+
 
         return $availabilities;
     }

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Availability extends Model
 {
-    public User $user;
+    public User|int $user;
     public Carbon $date;
 }
