@@ -110,7 +110,7 @@ class AppointmentResource extends Resource
                     ->dateTime()
                     ->translateLabel(),
                 Tables\Columns\TextColumn::make('status')
-                    ->badge(Status::class)
+                    ->badge()
                     ->translateLabel()
             ])
             ->filters([

@@ -14,13 +14,13 @@ class AppointmentOverview extends BaseWidget
         return [
             Stat::make(__('Total Appointments Today'),
                 Appointment::query()
-                    ->whereDate('start', Carbon::today())
+                    ->whereDate('start', Carbon::today()->format('Y-m-d'))
                     ->count()
                 )
                 ->icon('heroicon-o-user-group'),
             Stat::make(__('Your Appointments Today'),
                 Appointment::query()
-                    ->whereDate('start', Carbon::today())
+                    ->whereDate('start', Carbon::today()->format('Y-m-d'))
                     ->where('user_id', auth()->user()->id)
                     ->count()
                 )

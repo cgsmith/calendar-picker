@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Services;
 
+use App\Enums\QuestionType;
 use App\Models\ServiceQuestion;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -18,13 +19,14 @@ class FormService
                     <h2 class='text-base font-semibold leading-7 text-white'>" . __('A few questions') . "</h2>
                     <p class='mt-1 text-sm leading-6 text-gray-400'>" . __('These questions help us during your appointment.') . "</p>";
 
+        /** @var ServiceQuestion $question */
         foreach ($questions as $question) {
             $html .= match ($question->type) {
-                'text' => self::text($question),
-                'textarea' => self::text($question, 'textarea'),
-                'select' => self::select($question),
-                'checkbox' => self::checkbox($question),
-                'radio' => self::checkbox($question, 'radio'),
+                QuestionType::Text => self::text($question),
+                QuestionType::Textarea => self::text($question, 'textarea'),
+                QuestionType::Select => self::select($question),
+                QuestionType::Checkbox => self::checkbox($question),
+                QuestionType::Radio => self::checkbox($question, 'radio'),
             };
         }
 

@@ -2,16 +2,19 @@
 declare(strict_types=1);
 namespace App\Models;
 
+use App\Enums\QuestionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property string question
- * @property string hint
- * @property string type
- * @property array type_meta
- * @property bool required
+ * @property int $id
+ * @property string $question
+ * @property string $hint
+ * @property QuestionType $type
+ * @property array $type_meta
+ * @property int $order
+ * @property bool $required
  */
 class ServiceQuestion extends Model
 {

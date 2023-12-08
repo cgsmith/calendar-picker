@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Enums\ServiceTimeType;
@@ -10,7 +11,6 @@ use App\Models\Service;
 use App\Models\ServiceTimes;
 use App\Models\User;
 use App\Services\AppointmentService;
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -44,12 +44,13 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function userpicker(int $id, int $unixTimestamp) {
+    public function userpicker(int $id, int $unixTimestamp)
+    {
         $service = Service::where('active', 1)->where('id', $id)->first();
 
         $availableUsers = AppointmentService::availableDatetimes($service, $unixTimestamp);
 
-        $title = $service->name . ' - ' . Carbon::createFromFormat('U', $unixTimestamp)->format('l M jS');
+        $title = $service->name . ' - ' . Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
 
         return view('appointment.userpicker', [
             'service' => $service,
@@ -58,11 +59,12 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function datetimepicker(int $id, int $userid, int $unixTimestamp = 0) {
+    public function datetimepicker(int $id, int $userid, int $unixTimestamp = 0)
+    {
         $service = Service::where('active', 1)->where('id', $id)->first();
         $availableTimes = AppointmentService::availableDatetimes($service, $unixTimestamp, $userid);
 
-        $title = $service->name . ' - ' . Carbon::createFromFormat('U', $unixTimestamp)->format('l M jS');
+        $title = $service->name . ' - ' . Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
 
         $format = ($unixTimestamp) ? 'H:i' : 'd.m.Y';
 
@@ -78,22 +80,21 @@ class AppointmentController extends Controller
 
     public function confirm(int $id, int $userid, int $unixTimestamp)
     {
-        /** @var $service Service */
-        $service = Service::where('active',1)->where('id',$id)->first();
+        /** @var Service $service */
+        $service = Service::where('active', 1)->where('id', $id)->first();
+        $date = Carbon::createFromTimestamp($unixTimestamp);
+        $start = clone $date;
+        $end = clone $date;
         if ($service->all_day) {
-            $date = Carbon::createFromFormat('U', $unixTimestamp);
 
-            /**
-             * Get date from service time that matches selected day of week
-             *
-             * @var $dayOfWeekStartTime ServiceTimes
-             * @var $dayOfWeekEndTime ServiceTimes
-             */
+            /** @var ServiceTimes|null $dayOfWeekStartTime */
             $dayOfWeekStartTime = $service
                 ->times()
                 ->where('day_of_week', '=', $date->format('w'))
                 ->where('type', '=', ServiceTimeType::Start)
                 ->first();
+
+            /** @var ServiceTimes|null $dayOfWeekEndTime */
             $dayOfWeekEndTime = $service
                 ->times()
                 ->where('day_of_week', '=', $date->format('w'))
@@ -104,7 +105,7 @@ class AppointmentController extends Controller
             if (is_null($dayOfWeekStartTime) || is_null($dayOfWeekEndTime)) {
                 $start = $unixTimestamp;
                 $end = $unixTimestamp;
-            } else{
+            } else {
                 $start = clone $date->setHour($dayOfWeekStartTime->hour)->setMinute($dayOfWeekStartTime->minute);
                 $end = clone $date->setHour($dayOfWeekEndTime->hour)->setMinute($dayOfWeekEndTime->minute);
             }
@@ -114,7 +115,7 @@ class AppointmentController extends Controller
         // Create draft appointment - this will lock in the appointmnet - we can delete drafts after a certain amount of time
         return view('appointment.confirm', [
             'service' => $service,
-            'title' => $service->name .': '. __("let's gather a little more information"),
+            'title' => $service->name . ': ' . __("let's gather a little more information"),
             'userid' => $userid,
             'start' => $start->format('U'),
             'end' => $end->format('U'),
@@ -128,7 +129,7 @@ class AppointmentController extends Controller
             // get form data
             $contact = Contact::updateOrCreate(
                 ['email' => $request->email],
-                ['name' => $request->name,'phone' => $request->phone]
+                ['name' => $request->name, 'phone' => $request->phone]
             );
 
             // validate service_id
@@ -151,7 +152,7 @@ class AppointmentController extends Controller
                 'end' => $end,
             ]);
 
-            return view ('appointment.thankyou', [
+            return view('appointment.thankyou', [
                 'appointment' => $appointment
             ]);
         }

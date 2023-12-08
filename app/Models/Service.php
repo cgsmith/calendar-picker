@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property string name
- * @property string description
- * @property int duration
- * @property bool all_day
- * @property int minimum_cancel_hours
- * @property bool allow_user_selection
- * @property bool active
+ * @property string $name
+ * @property string $description
+ * @property int $duration
+ * @property bool $all_day
+ * @property int $minimum_cancel_hours
+ * @property bool $allow_user_selection
+ * @property bool $active
  */
 class Service extends Model
 {
