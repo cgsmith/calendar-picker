@@ -1,0 +1,16 @@
+image: composer:2.0
+
+pipelines:
+  default:
+    - parallel:
+        - step:
+            name: Test
+            script:
+              - php -r "file_exists('.env') || copy('.env.example', '.env');"
+              - composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+              - php artisan key:generate
+              - chmod -R 777 storage bootstrap/cache
+              - ./vendor/bin/pest test
+              - ./vendor/bin/phpstan
+            caches:
+              - composer
