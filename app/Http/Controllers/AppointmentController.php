@@ -64,7 +64,11 @@ class AppointmentController extends Controller
     public function datetimepicker(int $id, int $userid, int $unixTimestamp = 0)
     {
         $service = Service::where('active', 1)->where('id', $id)->first();
-        $availableTimes = AppointmentService::availableDatetimes($service, $unixTimestamp, $userid);
+        $availableTimes = AppointmentService::availableDatetimes(
+            service: $service,
+            date: $unixTimestamp,
+            userid: $userid,
+        );
 
         $title = $service->name . ' - ' . Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
 

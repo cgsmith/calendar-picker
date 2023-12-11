@@ -28,6 +28,7 @@ class ServiceSeeder extends Seeder
             'active' => 1
         ]);
 
+        // 2
         DB::table('services')->insert([
             'name' => 'Workshop Appointment with user selection',
             'description' => 'This is a description',
@@ -89,6 +90,25 @@ class ServiceSeeder extends Seeder
             'hour' => 16,
             'minute' => 0,
         ]);
+
+        // Create full week of availability for service_id 2 - daily from 12 - 18:30
+        for ($i = 0; $i < 7; $i++) {
+            DB::table('service_times')->insert([
+                'service_id' => 2,
+                'day_of_week' => $i,
+                'type' => ServiceTimeType::Start,
+                'hour' => 12,
+                'minute' => 0,
+            ]);
+            DB::table('service_times')->insert([
+                'service_id' => 2,
+                'day_of_week' => $i,
+                'type' => ServiceTimeType::End,
+                'hour' => 18,
+                'minute' => 30,
+            ]);
+        }
+
 
         ServiceQuestion::factory()
             ->count(5)

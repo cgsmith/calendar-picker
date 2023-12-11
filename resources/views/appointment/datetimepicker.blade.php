@@ -6,9 +6,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 @endpush
 
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-@endpush
 <div class="mt-16">
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
@@ -27,10 +24,8 @@
                 <input id="datepicker" type="hidden"/>
                 <script>
                     const allowedDates = [
-                        @foreach($availableTimes as $userid => $userTimes)
-                            @foreach($userTimes as $time)
+                        @foreach($availableTimes as $time)
                                 '{{ $time->date->format('Y-m-d') }}',
-                            @endforeach
                         @endforeach
                     ]
                     const picker = new easepick.create({

@@ -22,10 +22,10 @@ class AppointmentSeeder extends Seeder
          *
          * Booked Appointments: YYYY-MM- first monday at 13 - 14 and YYYY-MM- first Weds at 13 - 14
          */
-        $mondayStart = Carbon::parse('next monday at 13:00');
-        $mondayEnd = Carbon::parse('next monday at 14:00');
-        $wednesdayStart = Carbon::parse('next wednesday at 13:00');
-        $wednesdayEnd = Carbon::parse('next wednesday at 14:00');
+        $mondayStart = Carbon::parse('december 18 2023 at 13:00');
+        $mondayEnd = Carbon::parse('december 18 2023 at 14:00');
+        $wednesdayStart = Carbon::parse('december 20 2023 at 13:00');
+        $wednesdayEnd = Carbon::parse('december 20 2023 at 14:00');
         DB::table('appointments')->insert([
             'description' => 'Monday @ 13 booking',
             'start' => $mondayStart->format('Y-m-d H:i:s'),

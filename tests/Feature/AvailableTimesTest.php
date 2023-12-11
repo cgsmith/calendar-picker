@@ -1,11 +1,9 @@
 <?php
-dataset('days_of_the_week', [
-    'Sunday',
-    'Monday',
-]);
+
+use App\Settings\GeneralSetting;
 
 dataset('available_time_check', [
-    [1, 0, 1]
+    [1, 0, 1, 1702811876] // 2023-12-17
 ]);
 
 describe('available times tests', function () {
@@ -20,21 +18,30 @@ describe('available times tests', function () {
         it('expects no times to return', function () {
             expect(1)->toBe(2);
         });*/
-    it('checks that available times return', function ($service, $date, $userid) {
+    it('checks that available times return', function ($service, $date, $userid, $startDate) {
         $service = \App\Models\Service::find($service);
-        $availableDatetimes = \App\Services\AppointmentService::availableDatetimes($service, $date, $userid);
+        $availableDatetimes = \App\Services\AppointmentService::availableDatetimes($service, $userid, $date);
         expect($availableDatetimes)
             ->toBeArray()
             ->toContainOnlyInstancesOf(\App\Models\Availability::class);
     })->with('available_time_check');
 
-    it('available times are valid', function ($service, $date, $userid) {
+    it('available times are valid', function ($service, $date, $userid, $startDate) {
         $service = \App\Models\Service::find($service);
-        $availableDatetimes = \App\Services\AppointmentService::availableDatetimes($service, $date, $userid);
-        $nextMonday = \Carbon\Carbon::parse('next monday'); // unavail
-        $nextWednesday = \Carbon\Carbon::parse('next wednesday'); // avail
-        $next2Monday = \Carbon\Carbon::parse('+2 monday'); // unavail
-        $next2Wednesday = \Carbon\Carbon::parse('+2 wednesday'); // avail
+        $availableDatetimes = \App\Services\AppointmentService::availableDatetimes(
+            service: $service,
+            date: $date,
+            userid: $userid,
+            startDate: $startDate);
+
+        /**
+         * Dec 18 and Dec 20 unvail
+         * Other mondays and weds avail
+         */
+        $nextMonday = \Carbon\Carbon::parse('December 18 2023'); // unavail
+        $nextWednesday = \Carbon\Carbon::parse('December 20 2023'); // unavail
+        $next2Monday = \Carbon\Carbon::parse('December 25 2023'); // avail
+        $next2Wednesday = \Carbon\Carbon::parse('December 27 2023'); // avail
 
         /**
          * Not next monday or next weds
@@ -44,13 +51,26 @@ describe('available times tests', function () {
         $nextDate2 = array_shift($availableDatetimes);
 
         expect($nextDate->date->format('Y-m-d'))
-            ->toEqual($next2Monday->format('Y-m-d'))
-            ->not->toEqual($nextMonday->format('Y-m-d'));
+            ->toBe($next2Monday->format('Y-m-d'))
+            ->not->toBe($nextMonday->format('Y-m-d'));
+
         expect($nextDate2->date->format('Y-m-d'))
-            ->toEqual($next2Wednesday->format('Y-m-d'))
-            ->not->toEqual($nextWednesday->format('Y-m-d'));
+            ->toBe($next2Wednesday->format('Y-m-d'))
+            ->not->toBe($nextWednesday->format('Y-m-d'));
 
     })->with('available_time_check');
+
+    it('calls appropriate model APIs', function () {
+        $service = \App\Models\Service::find(2);
+        $availableDates = \App\Services\AppointmentService::availableDatetimes($service, 0, 0);
+
+        $currentDate = \Carbon\Carbon::now();
+        $currentDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
+        foreach ($availableDates as $availableDate) {
+            expect($availableDate->date->format('Y-m-d'))->toEqual($currentDate->format('Y-m-d'));
+            $currentDate->add('day', 1);
+        }
+    });
 
     it('skips user selection if service disallows user selection', function () {
         $this->get('/appointment/service/1')

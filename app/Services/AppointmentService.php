@@ -8,6 +8,7 @@ use App\Models\Service;
 use App\Models\ServiceQuestion;
 use App\Models\ServiceTimes;
 use App\Models\User;
+use App\Settings\GeneralSetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -28,35 +29,38 @@ class AppointmentService
         return ['11:30', '12:30', '14:30'];
     }
 
-    public static function availableDatetimes(Service $service, int|null $date, int $userid = 0): array
+    public static function availableDatetimes(
+        Service  $service,
+        int      $userid = 0,
+        int|null $date = null,
+        int|null $startDate = null,
+    ): array
     {
         /**
          * 1. If $date is null then we first need to fetch the dates available - not times
          *
          */
-        // get all appointments for date range on service
-
-        // get all employees for available service
-
         $availabilities = [];
 
         // get specific user or get all users
         $users = ($userid) ? User::where('id', $userid)->get() : $service->users()->get();
         $maxApptPerDay = $users->sum('maximum_appointments_per_day');
-        // look ahead days
-            // calculate out availability days
 
-            //
+        if (!$startDate) {
+            $startDate = Carbon::now();
+        } else {
+            $startDate = Carbon::createFromTimestamp($startDate);
+        }
 
-            // tests
             if ($date) {
             } else {
-                $minimumLookaheadDate = 0; // how far to start looking ahead
-                $maxLookaheadDate = 60;
-                for ($i = $minimumLookaheadDate; $i <= ($maxLookaheadDate + $minimumLookaheadDate); $i++) {
-                    $startDate = Carbon::now();
-                    $startDate->add('day', $i);
-                    $appointmentCount = Appointment::query()
+                // set the startdate ahead the appropriate minimum lookahead
+                $startDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
+                for ($i = 0;
+                     $i <= app(GeneralSetting::class)->maximum_day_lookahead;
+                     $i++) {
+                    $appointmentCount = $service
+                        ->appointment()
                         ->whereRaw('DATE(start) = "' . $startDate->format('Y-m-d') . '"')
                         ->whereIn('user_id', $users->modelKeys())
                         ->count();
@@ -65,9 +69,9 @@ class AppointmentService
 
                     // if the appt count is less than maximum per day
                     if ($appointmentCount < $maxApptPerDay) {
-                        $serviceCount = ServiceTimes::query()
-                            ->where('service_id', $service->id)
-                            ->where('day_of_week', $startDate->format('w')  )
+                        $serviceCount = $service
+                            ->times()
+                            ->where('day_of_week', $startDate->format('w'))
                             ->count();
                         if ($serviceCount > 0) {
                             $availability = new Availability();
@@ -76,6 +80,7 @@ class AppointmentService
                             $availabilities[] = $availability;
                         }
                     }
+                    $startDate->add('day', 1);
                 }
             }
 
