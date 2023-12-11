@@ -1,9 +1,10 @@
-image: php:8.2
-
 pipelines:
   default:
     - parallel:
         - step:
+            services:
+              - php
+              - mysql
             name: Test
             script:
               - apt-get update && apt-get install -y unzip
@@ -12,7 +13,22 @@ pipelines:
               - php -r "file_exists('.env') || copy('.env.example', '.env');"
               - php artisan key:generate
               - chmod -R 777 storage bootstrap/cache
+              - php artisan migrate:fresh
+              - php artisan db:seed
               - ./vendor/bin/pest test
               - ./vendor/bin/phpstan
             caches:
               - composer
+
+definitions:
+  services:
+    php:
+      image: php:8.2
+    mysql:
+      image: mysql:8.0
+      variables:
+        MYSQL_ROOT_PASSWORD: 'password'
+        MYSQL_ROOT_HOST: '%'
+        MYSQL_DATABASE: 'laravel'
+        MYSQL_USER: 'sail'
+        MYSQL_PASSWORD: 'password'
