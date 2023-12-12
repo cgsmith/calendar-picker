@@ -109,8 +109,7 @@ class AppointmentController extends Controller
 
             // If dayOfWeek not found (for some reason) just use the current time that was passed through
             if (is_null($dayOfWeekStartTime) || is_null($dayOfWeekEndTime)) {
-                $start = $unixTimestamp;
-                $end = $unixTimestamp;
+                $start = $end = Carbon::createFromTimestamp($unixTimestamp);
             } else {
                 $start = clone $date->setHour($dayOfWeekStartTime->hour)->setMinute($dayOfWeekStartTime->minute);
                 $end = clone $date->setHour($dayOfWeekEndTime->hour)->setMinute($dayOfWeekEndTime->minute);

@@ -22,11 +22,11 @@ class FormService
         /** @var ServiceQuestion $question */
         foreach ($questions as $question) {
             $html .= match ($question->type) {
-                QuestionType::Text => self::text($question),
-                QuestionType::Textarea => self::text($question, 'textarea'),
-                QuestionType::Select => self::select($question),
-                QuestionType::Checkbox => self::checkbox($question),
-                QuestionType::Radio => self::checkbox($question, 'radio'),
+                QuestionType::text => self::text($question),
+                QuestionType::textarea => self::text($question, 'textarea'),
+                QuestionType::select => self::select($question),
+                QuestionType::checkbox => self::checkbox($question),
+                QuestionType::radio => self::checkbox($question, 'radio'),
             };
         }
 

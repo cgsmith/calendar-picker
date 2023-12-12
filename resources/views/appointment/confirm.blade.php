@@ -55,18 +55,7 @@
                 <input type="hidden" name="user_id" value="{{$userid}}">
                 <input type="hidden" name="start" value="{{$start}}">
                 <input type="hidden" name="end" value="{{$end}}">
-                <div class="mt-10 space-y-10">
-                    <div class="mt-6 space-y-6">
-                        <div class="relative flex gap-x-3">
-                            <div class="flex h-6 items-center">
-                                <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
-                            </div>
-                            <div class="text-sm leading-6">
-                                <label for="terms" class="font-medium text-white">{!! $service->terms !!} </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <button type="submit"

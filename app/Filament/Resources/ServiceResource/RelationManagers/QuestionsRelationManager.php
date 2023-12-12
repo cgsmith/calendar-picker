@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Filament\Resources\ServiceResource\RelationManagers;
 
 use App\Enums\QuestionType;
@@ -26,6 +27,8 @@ class QuestionsRelationManager extends RelationManager
 
                 Forms\Components\Select::make('type')
                     ->translateLabel()
+                    ->live()
+                    ->required()
                     ->options(QuestionType::class),
 
                 Forms\Components\TextInput::make('hint')
@@ -41,8 +44,13 @@ class QuestionsRelationManager extends RelationManager
                 Forms\Components\Repeater::make('type_meta')
                     ->columnSpanFull()
                     ->hint(__('These options appear for types: checkbox, dropdown, radio'))
-                    ->simple(Forms\Components\TextInput::make('value'))
-                    ->default([])
+                    ->simple(Forms\Components\TextInput::make('value')
+                        ->required(function (Forms\Get $get): bool {
+                            return in_array($get('type'), ['text', 'textarea', '']);
+                        }))
+                    ->hidden(function (Forms\Get $get): bool {
+                        return in_array($get('type'), ['text', 'textarea', '']);
+                    })
                     ->addActionLabel(__('Add Option'))
                     ->reorderableWithButtons(),
             ]);

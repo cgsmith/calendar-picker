@@ -7,32 +7,32 @@ use Filament\Support\Contracts\HasLabel;
 
 enum QuestionType: string implements HasLabel, HasColor
 {
-    case Text = 'text';
-    case Textarea = 'textarea';
-    case Select = 'select';
-    case Checkbox = 'checkbox';
+    case text = 'text';
+    case textarea = 'textarea';
+    case select = 'select';
+    case checkbox = 'checkbox';
 
-    case Radio = 'radio';
+    case radio = 'radio';
 
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Text => __('Text'),
-            self::Textarea => __('Text Area'),
-            self::Select => __('Select'),
-            self::Checkbox => __('Checkbox'),
-            self::Radio => __('Radio'),
+            self::text => __('Text'),
+            self::textarea => __('Text Area'),
+            self::select => __('Select'),
+            self::checkbox => __('Checkbox'),
+            self::radio => __('Radio'),
         };
     }
 
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::Text => 'success',
-            self::Textarea => 'secondary',
-            self::Select => 'danger',
-            self::Checkbox => 'warning',
-            self::Radio => 'info',
+            self::text => 'success',
+            self::textarea => 'secondary',
+            self::select => 'danger',
+            self::checkbox => 'warning',
+            self::radio => 'info',
         };
     }
 }

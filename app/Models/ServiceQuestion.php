@@ -25,7 +25,8 @@ class ServiceQuestion extends Model
     ];
 
     protected $casts = [
-        'type_meta' => 'array'
+        'type_meta' => 'array',
+        'type' => QuestionType::class,
     ];
 
     public function service(): BelongsTo

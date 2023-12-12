@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\QuestionType;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +23,7 @@ class ServiceQuestionFactory extends Factory
             'service_id' => $service->id,
             'question' => fake()->text(),
             'hint' => fake()->text(),
-            'type' => fake()->randomElement(['text','textarea','option','checkbox']),
+            'type' => fake()->randomElement(QuestionType::cases()),
             'type_meta' => [fake()->text(10), fake()->text(5), fake()->text(15)],
             'order' => rand(0,100),
             'required' => fake()->boolean()
