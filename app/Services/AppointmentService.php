@@ -88,13 +88,22 @@ class AppointmentService
         return $availabilities;
     }
 
-    public static function buildDescription(Request $request)
+    /**
+     * Return a string of ul/li question answer responses if available
+     *
+     * @param Request $request
+     * @return string
+     */
+    public static function buildDescription(Request $request): string
     {
+        if (!$request->has('questions')) {
+            return '';
+        }
+
         $description = '<ul>';
         foreach ($request->questions as $questionKey => $questionMeta) {
             $question = ServiceQuestion::find($questionKey);
             $meta = strip_tags($questionMeta);
-            //var_dump($questionKey);die;
             $description .= "<li>{$question->question}</li><ul><li>{$meta}</li></ul>";
         }
         return $description . '</ul>';
