@@ -27,8 +27,11 @@ testing against.
 
 ### Code Style and Guide
 
-Code styling should follow [PSR-12](https://www.php-fig.org/psr/psr-12/) which most IDEs have a setting. PEST is
-configured to
+Code styling should follow Laravel code-style, which most IDEs have a setting. Pint is configured to run on builds and
+you should run `sail php ./vendor/bin/pint` before pushing to fix and enforce code styling. You can also run the same
+command with `sail php ./vendor/bin/pint --test` to see if all files adhere to code styling.
+
+PEST is configured to
 enforce [strict types](https://www.php.net/manual/en/language.types.declarations.php#language.types.declarations.strict).
 
 Each PHP file in the application, dependencies being the exception, should start with:

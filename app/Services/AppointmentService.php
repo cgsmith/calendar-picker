@@ -31,9 +31,9 @@ class AppointmentService
 
     public static function availableDatetimes(
         Service $service,
-        int     $userid = 0,
-        ?int    $date = null,
-        ?int    $startDate = null,
+        int  $userid = 0,
+        ?int $date = null,
+        ?int $startDate = null,
     ): array
     {
         /**
