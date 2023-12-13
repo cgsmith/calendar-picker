@@ -6,7 +6,6 @@ use App\Enums\DayOfWeek;
 use App\Enums\ServiceTimeType;
 use App\Models\Service;
 use App\Models\ServiceQuestion;
-use App\Models\ServiceTimes;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -25,7 +24,7 @@ class ServiceSeeder extends Seeder
             'all_day' => 1,
             'minimum_cancel_hours' => 2,
             'allow_user_selection' => 0,
-            'active' => 1
+            'active' => 1,
         ]);
 
         // 2
@@ -36,9 +35,8 @@ class ServiceSeeder extends Seeder
             'all_day' => 1,
             'minimum_cancel_hours' => 2,
             'allow_user_selection' => 1,
-            'active' => 1
+            'active' => 1,
         ]);
-
 
         DB::table('services')->insert([
             'name' => 'Workshop Appointment with multiple users but no selection',
@@ -47,7 +45,7 @@ class ServiceSeeder extends Seeder
             'all_day' => 1,
             'minimum_cancel_hours' => 2,
             'allow_user_selection' => 0,
-            'active' => 1
+            'active' => 1,
         ]);
 
         // Attach 1 user to service
@@ -108,7 +106,6 @@ class ServiceSeeder extends Seeder
                 'minute' => 30,
             ]);
         }
-
 
         ServiceQuestion::factory()
             ->count(5)

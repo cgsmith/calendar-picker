@@ -1,19 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ServiceResource\Pages;
 use App\Filament\Resources\ServiceResource\RelationManagers;
 use App\Models\Service;
-use Faker\Provider\Text;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Symfony\Component\Console\Question\Question;
 
 class ServiceResource extends Resource
 {
@@ -83,7 +81,7 @@ class ServiceResource extends Resource
                     ->translateLabel()
                     ->helperText(__('The amount of hours the contact is able to cancel the appointment')),
                 Forms\Components\Toggle::make('active')
-                    ->translateLabel()
+                    ->translateLabel(),
             ]);
     }
 
@@ -116,9 +114,9 @@ class ServiceResource extends Resource
     public static function getRelations(): array
     {
         return [
-                RelationManagers\QuestionsRelationManager::class,
-                RelationManagers\TimesRelationManager::class,
-                RelationManagers\UsersRelationManager::class,
+            RelationManagers\QuestionsRelationManager::class,
+            RelationManagers\TimesRelationManager::class,
+            RelationManagers\UsersRelationManager::class,
         ];
     }
 

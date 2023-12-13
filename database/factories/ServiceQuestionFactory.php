@@ -19,14 +19,15 @@ class ServiceQuestionFactory extends Factory
     public function definition(): array
     {
         $service = Service::inRandomOrder()->first();
+
         return [
             'service_id' => $service->id,
             'question' => fake()->text(),
             'hint' => fake()->text(),
             'type' => fake()->randomElement(QuestionType::cases()),
             'type_meta' => [fake()->text(10), fake()->text(5), fake()->text(15)],
-            'order' => rand(0,100),
-            'required' => fake()->boolean()
+            'order' => rand(0, 100),
+            'required' => fake()->boolean(),
         ];
     }
 }

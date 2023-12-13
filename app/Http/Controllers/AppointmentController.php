@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -31,10 +32,11 @@ class AppointmentController extends Controller
         $userCount = $service->users()->count() === 1;
         if (!$service->allow_user_selection || $userCount) {
             $userid = ($userCount) ? $service->users()->first()->id : 0;
+
             return redirect()->action([AppointmentController::class, 'datetimepicker'], [
                 'id' => $service->id,
                 'userId' => $userid,
-                'unixTimestamp' => 0
+                'unixTimestamp' => 0,
             ]);
         }
         $availableTimes = AppointmentService::availableDatetimes($service, $unixTimestamp);
@@ -116,7 +118,6 @@ class AppointmentController extends Controller
             }
         }
 
-
         // Create draft appointment - this will lock in the appointmnet - we can delete drafts after a certain amount of time
         return view('appointment.confirm', [
             'service' => $service,
@@ -158,9 +159,8 @@ class AppointmentController extends Controller
             ]);
 
             return view('appointment.thankyou', [
-                'appointment' => $appointment
+                'appointment' => $appointment,
             ]);
         }
     }
-
 }

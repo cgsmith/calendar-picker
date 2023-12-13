@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Appointment;
 use App\Models\Availability;
 use App\Models\Service;
 use App\Models\ServiceQuestion;
-use App\Models\ServiceTimes;
 use App\Models\User;
 use App\Settings\GeneralSetting;
 use Carbon\Carbon;
@@ -14,7 +15,6 @@ use Illuminate\Http\Request;
 
 class AppointmentService
 {
-
     /**
      * - activeServices
      * - availableAppointments
@@ -30,15 +30,14 @@ class AppointmentService
     }
 
     public static function availableDatetimes(
-        Service  $service,
-        int      $userid = 0,
-        int|null $date = null,
-        int|null $startDate = null,
+        Service $service,
+        int     $userid = 0,
+        ?int    $date = null,
+        ?int    $startDate = null,
     ): array
     {
         /**
          * 1. If $date is null then we first need to fetch the dates available - not times
-         *
          */
         $availabilities = [];
 
@@ -52,47 +51,43 @@ class AppointmentService
             $startDate = Carbon::createFromTimestamp($startDate);
         }
 
-            if ($date) {
-            } else {
-                // set the startdate ahead the appropriate minimum lookahead
-                $startDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
-                for ($i = 0;
-                     $i <= app(GeneralSetting::class)->maximum_day_lookahead;
-                     $i++) {
-                    $appointmentCount = $service
-                        ->appointment()
-                        ->whereRaw('DATE(start) = "' . $startDate->format('Y-m-d') . '"')
-                        ->whereIn('user_id', $users->modelKeys())
+        if ($date) {
+        } else {
+            // set the startdate ahead the appropriate minimum lookahead
+            $startDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
+            for ($i = 0;
+                 $i <= app(GeneralSetting::class)->maximum_day_lookahead;
+                 $i++) {
+                $appointmentCount = $service
+                    ->appointment()
+                    ->whereRaw('DATE(start) = "' . $startDate->format('Y-m-d') . '"')
+                    ->whereIn('user_id', $users->modelKeys())
+                    ->count();
+
+                // does date fall within hours in service times?
+
+                // if the appt count is less than maximum per day
+                if ($appointmentCount < $maxApptPerDay) {
+                    $serviceCount = $service
+                        ->times()
+                        ->where('day_of_week', $startDate->format('w'))
                         ->count();
-
-                    // does date fall within hours in service times?
-
-                    // if the appt count is less than maximum per day
-                    if ($appointmentCount < $maxApptPerDay) {
-                        $serviceCount = $service
-                            ->times()
-                            ->where('day_of_week', $startDate->format('w'))
-                            ->count();
-                        if ($serviceCount > 0) {
-                            $availability = new Availability();
-                            $availability->user = $userid;
-                            $availability->date = Carbon::createFromFormat('Y-m-d',$startDate->format('Y-m-d'));
-                            $availabilities[] = $availability;
-                        }
+                    if ($serviceCount > 0) {
+                        $availability = new Availability();
+                        $availability->user = $userid;
+                        $availability->date = Carbon::createFromFormat('Y-m-d', $startDate->format('Y-m-d'));
+                        $availabilities[] = $availability;
                     }
-                    $startDate->add('day', 1);
                 }
+                $startDate->add('day', 1);
             }
-
+        }
 
         return $availabilities;
     }
 
     /**
      * Return a string of ul/li question answer responses if available
-     *
-     * @param Request $request
-     * @return string
      */
     public static function buildDescription(Request $request): string
     {
@@ -106,6 +101,7 @@ class AppointmentService
             $meta = strip_tags($questionMeta);
             $description .= "<li>{$question->question}</li><ul><li>{$meta}</li></ul>";
         }
+
         return $description . '</ul>';
     }
 
@@ -136,5 +132,4 @@ FROM (
 ) AS existing_appointments ON possible_dates.possible_date = existing_appointments.appointment_date
 WHERE COALESCE(existing_appointments.appointments_count, 0) < @max_appointments_per_day OR existing_appointments.appointments_count IS NULL;";
     }
-
 }

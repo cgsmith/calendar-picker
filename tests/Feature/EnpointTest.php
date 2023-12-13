@@ -12,4 +12,3 @@ it('confirm page has questions', function () {
     $this->get('/appointment/service/1/1/1703458800/confirm')
         ->assertStatus(200);
 });
-

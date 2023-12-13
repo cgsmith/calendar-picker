@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\Status;
@@ -12,7 +14,7 @@ class Appointment extends Model
     use HasFactory;
 
     protected $casts = [
-      'status' => Status::class
+        'status' => Status::class,
     ];
 
     public function contact(): BelongsTo

@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Filament\Widgets;
 
 use App\Models\Appointment;
@@ -12,18 +14,20 @@ class AppointmentOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make(__('Total Appointments Today'),
+            Stat::make(
+                __('Total Appointments Today'),
                 Appointment::query()
                     ->whereDate('start', Carbon::today()->format('Y-m-d'))
                     ->count()
-                )
+            )
                 ->icon('heroicon-o-user-group'),
-            Stat::make(__('Your Appointments Today'),
+            Stat::make(
+                __('Your Appointments Today'),
                 Appointment::query()
                     ->whereDate('start', Carbon::today()->format('Y-m-d'))
                     ->where('user_id', auth()->user()->id)
                     ->count()
-                )
+            )
                 ->icon('heroicon-o-user'),
         ];
     }

@@ -19,8 +19,8 @@ class ServiceFactory extends Factory
         return [
             'name' => fake()->streetName(),
             'description' => fake()->text(),
-            'duration' => fake()->randomElement([15,30,90,120]),
-            'minimum_cancel_hours' => fake()->randomElement([null,2,4,8,24]),
+            'duration' => fake()->randomElement([15, 30, 90, 120]),
+            'minimum_cancel_hours' => fake()->randomElement([null, 2, 4, 8, 24]),
             'all_day' => fake()->boolean(80),
             'allow_user_selection' => fake()->boolean(),
             'active' => fake()->boolean(80),

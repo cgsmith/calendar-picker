@@ -18,12 +18,13 @@ class ServiceTimesFactory extends Factory
     public function definition(): array
     {
         $service = Service::inRandomOrder()->first();
+
         return [
             'service_id' => $service->id,
-            'day_of_week' => rand(0,6),
-            'type' => rand(0,1),
-            'hour' => rand(0,23),
-            'minute' => rand(0,59),
+            'day_of_week' => rand(0, 6),
+            'type' => rand(0, 1),
+            'hour' => rand(0, 23),
+            'minute' => rand(0, 59),
         ];
     }
 }

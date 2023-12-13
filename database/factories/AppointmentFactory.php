@@ -35,11 +35,11 @@ class AppointmentFactory extends Factory
         return [
             'description' => $description,
             'start' => '2023',
-            'end' => fake()->dateTime()->setDate(date('Y'), date('m'), rand(1,28)),
+            'end' => fake()->dateTime()->setDate(date('Y'), date('m'), rand(1, 28)),
             'contact_id' => Contact::inRandomOrder()->first()->id,
             'user_id' => User::inRandomOrder()->first()->id,
             'service_id' => 1,
-            'status' => fake()->randomElement(['today', 'upcoming', 'past'])
+            'status' => fake()->randomElement(['today', 'upcoming', 'past']),
         ];
     }
 }

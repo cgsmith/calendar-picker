@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\QuestionType;
@@ -21,7 +23,7 @@ class ServiceQuestion extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sort'
+        'sort',
     ];
 
     protected $casts = [

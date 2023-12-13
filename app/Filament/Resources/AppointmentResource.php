@@ -1,11 +1,10 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
-use App\Enums\Status;
 use App\Filament\Resources\AppointmentResource\Pages;
-use App\Filament\Resources\AppointmentResource\RelationManagers;
-use App\Filament\Resources\AppointmentResource\Widgets\AppointmentOverview;
 use App\Models\Appointment;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -76,7 +75,7 @@ class AppointmentResource extends Resource
                     ->translateLabel(),
                 Forms\Components\RichEditor::make('description')
                     ->toolbarButtons([
-                        'bold', 'italic', 'redo', 'undo'
+                        'bold', 'italic', 'redo', 'undo',
                     ])
                     ->columnSpanFull()
                     ->required()
@@ -111,7 +110,7 @@ class AppointmentResource extends Resource
                     ->translateLabel(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->translateLabel()
+                    ->translateLabel(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -120,7 +119,7 @@ class AppointmentResource extends Resource
                         'today' => __('Today'),
                         'upcoming' => __('Upcoming'),
                     ])
-                    ->translateLabel()
+                    ->translateLabel(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -147,5 +146,4 @@ class AppointmentResource extends Resource
             'edit' => Pages\EditAppointment::route('/{record}/edit'),
         ];
     }
-
 }

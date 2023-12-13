@@ -1,11 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Enums;
 
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum QuestionType: string implements HasLabel, HasColor
+enum QuestionType: string implements HasColor, HasLabel
 {
     case text = 'text';
     case textarea = 'textarea';

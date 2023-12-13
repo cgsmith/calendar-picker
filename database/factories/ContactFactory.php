@@ -17,9 +17,10 @@ class ContactFactory extends Factory
     public function definition(): array
     {
         $phone = null;
-        if (1 === rand(1,3)) {
+        if (rand(1, 3) === 1) {
             $phone = fake()->phoneNumber();
         }
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),

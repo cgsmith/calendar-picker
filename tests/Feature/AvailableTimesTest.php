@@ -3,7 +3,7 @@
 use App\Settings\GeneralSetting;
 
 dataset('available_time_check', [
-    [1, 0, 1, 1702811876] // 2023-12-17
+    [1, 0, 1, 1702811876], // 2023-12-17
 ]);
 
 describe('available times tests', function () {
@@ -32,7 +32,8 @@ describe('available times tests', function () {
             service: $service,
             date: $date,
             userid: $userid,
-            startDate: $startDate);
+            startDate: $startDate
+        );
 
         /**
          * Dec 18 and Dec 20 unvail
@@ -45,6 +46,7 @@ describe('available times tests', function () {
 
         /**
          * Not next monday or next weds
+         *
          * @var \App\Models\Availability $nextDate
          */
         $nextDate = array_shift($availableDatetimes);

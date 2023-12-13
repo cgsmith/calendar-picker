@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Enums\QuestionType;
@@ -8,7 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FormService
 {
-
     public static function render(?Collection $questions)
     {
         if (count($questions) === 0) {
@@ -17,7 +18,7 @@ class FormService
 
         $html = "<div>
                     <h2 class='text-base font-semibold leading-7 text-white'>" . __('A few questions') . "</h2>
-                    <p class='mt-1 text-sm leading-6 text-gray-400'>" . __('These questions help us during your appointment.') . "</p>";
+                    <p class='mt-1 text-sm leading-6 text-gray-400'>" . __('These questions help us during your appointment.') . '</p>';
 
         /** @var ServiceQuestion $question */
         foreach ($questions as $question) {
@@ -100,7 +101,6 @@ class FormService
     /**
      * Generate a hint that renders below the name of the form element
      *
-     * @param ServiceQuestion $question
      * @return string
      */
     public static function hint(ServiceQuestion $question)
@@ -111,7 +111,6 @@ class FormService
     /**
      * Generate an optional tag if the question is not required
      *
-     * @param ServiceQuestion $question
      * @return string
      */
     public static function optional(ServiceQuestion $question)
@@ -123,5 +122,4 @@ class FormService
     {
         return ($question->required) ? 'required' : '';
     }
-
 }
