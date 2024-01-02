@@ -96,3 +96,16 @@ Each PHP file in the application, dependencies being the exception, should start
 
 declare(strict_types=1);
 ```
+
+### Bitbucket Pipelines
+
+Pipelines runs on pushes to `master`. The pushes are done through a pull request. You can see the pipeline status on
+[bitbucket.org](https://bitbucket.org/mount7freiburg/termin.mount7.com/pipelines)
+
+If the pipeline fails you can test locally:
+
+```shell
+docker build --memory=1g --memory-swap=1g -t chris/bbtermin:tag -f my.dockerfile .
+docker run --network=host --name bbmysql -e MYSQL_DATABASE='laravel' -e MYSQL_ROOT_PASSWORD='password' -e MYSQL_ROOT_HOST='%' -e MYSQL_USER='sail' -e MYSQL_PASSWORD='password' -d mysql:8.0
+docker run -it --network=host --memory=4g --memory-swap=4g --memory-swappiness=0 --cpus=4 --entrypoint=/bin/bash chris/bbtermin:tag
+```

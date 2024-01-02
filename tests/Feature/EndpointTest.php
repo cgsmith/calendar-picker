@@ -9,6 +9,6 @@ it('/admin redirects to login', function () {
 });
 
 it('confirm page has questions', function () {
-    $this->get('/appointment/service/1/1/1703458800/confirm')
+    $this->get('/service/1/user/1/time/1703458800/confirm')
         ->assertStatus(200);
 });

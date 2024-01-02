@@ -64,18 +64,18 @@ describe('available times tests', function () {
     });
 
     it('skips user selection if service disallows user selection', function () {
-        $this->get('/appointment/service/1')
-            ->assertRedirect('/appointment/service/1/1/0');
+        $this->get('/service/1')
+            ->assertRedirect('/service/1/user/1/time/0');
     });
 
     it('skips user selection if only one user', function () {
-        $this->get('/appointment/service/2')
-            ->assertRedirect('/appointment/service/2/1/0');
+        $this->get('/service/2')
+            ->assertRedirect('/service/2/user/1/time/0');
     });
 
     it('skips user selection if disallowed - userid 0 if many users assigned', function () {
-        $this->get('/appointment/service/3')
-            ->assertRedirect('/appointment/service/3/0/0');
+        $this->get('/service/3')
+            ->assertRedirect('/service/3/user/0/time/0');
     });
 
 });
