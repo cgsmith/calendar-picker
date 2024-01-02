@@ -1,68 +1,68 @@
 image: php:8.2
 
 pipelines:
-  default:
-    - parallel:
-        - step:
-            services:
-              - mysql
-            name: Test application
-            script:
-              - apt-get update && apt-get install -qy git curl libicu-dev unzip zip
-              - docker-php-ext-install intl pdo_mysql
-              - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-              - composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-              - php -r "file_exists('.env') || copy('.env.example', '.env');"
-              - php artisan key:generate
-              - chmod -R 777 storage bootstrap/cache
-              - php artisan migrate:fresh --seed
-              - php artisan serve &
-              - ./vendor/bin/pint --test # test code style
-              - ./vendor/bin/phpstan -q # perform statistical analysis
-              - ./vendor/bin/pest #unit tests
-              - composer install --no-dev -o --no-scripts --no-ansi --no-progress -q --prefer-dist
-              - rm .env #remove env variable before build
-              - zip -q -r build.zip . -x *.git* *tests*
-            caches:
-              - composer
-            artifacts:
-              - build.zip
-              - deploy.sh
-        - step:
-            name: Deploy build with SCP to TEST
-            script:
-              - pipe: atlassian/scp-deploy:latest
-                variables:
-                  USER: $USER
-                  SERVER: $SERVER
-                  REMOTE_PATH: '/var/builds/$BUILD_PATH/build-$BITBUCKET_COMMIT.zip'
-                  LOCAL_PATH: 'build.zip'
-        - step:
-            name: Install deploy.sh artifact
-            script:
-              - pipe: atlassian/scp-deploy:latest
-                variables:
-                  USER: $USER
-                  SERVER: $SERVER
-                  REMOTE_PATH: '/usr/local/bin/deploy.sh'
-                  LOCAL_PATH: 'deploy.sh'
-        - step:
-            name: Set permissions for deploy.sh
-            script:
-              - pipe: atlassian/ssh-run:latest
-                variables:
-                  SSH_USER: $USER
-                  SERVER: $SERVER
-                  COMMAND: 'chmod +x /usr/local/bin/deploy.sh'
-        - step:
-            name: Move current app to OLD and replace with new BUILD ZIP
-            deployment: test
-            script:
-              - pipe: atlassian/ssh-run:latest
-                variables:
-                  SSH_USER: $USER
-                  SERVER: $SERVER
-                  COMMAND: 'deploy.sh build-$BITBUCKET_COMMIT build-$BITBUCKET_COMMIT.zip $BUILD_PATH $BITBUCKET_BRANCH'
+  branches:
+    master:
+      - step:
+          services:
+            - mysql
+          name: Test application
+          script:
+            - apt-get update && apt-get install -qy git curl libicu-dev unzip zip
+            - docker-php-ext-install intl pdo_mysql
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+            - php -r "file_exists('.env') || copy('.env.example', '.env');"
+            - php artisan key:generate
+            - chmod -R 777 storage bootstrap/cache
+            - php artisan migrate:fresh --seed
+            - php artisan serve &
+            - ./vendor/bin/pint --test # test code style
+            - ./vendor/bin/phpstan -q # perform statistical analysis
+            - ./vendor/bin/pest #unit tests
+            - composer install --no-dev -o --no-scripts --no-ansi --no-progress -q --prefer-dist
+            - rm .env #remove env variable before build
+            - zip -q -r build.zip . -x *.git* *tests*
+          caches:
+            - composer
+          artifacts:
+            - build.zip
+            - deploy.sh
+      - step:
+          name: Deploy build with SCP to TEST
+          script:
+            - pipe: atlassian/scp-deploy:latest
+              variables:
+                USER: $USER
+                SERVER: $SERVER
+                REMOTE_PATH: '/var/builds/$BUILD_PATH/build-$BITBUCKET_COMMIT.zip'
+                LOCAL_PATH: 'build.zip'
+      - step:
+          name: Install deploy.sh artifact
+          script:
+            - pipe: atlassian/scp-deploy:latest
+              variables:
+                USER: $USER
+                SERVER: $SERVER
+                REMOTE_PATH: '/usr/local/bin/deploy.sh'
+                LOCAL_PATH: 'deploy.sh'
+      - step:
+          name: Set permissions for deploy.sh
+          script:
+            - pipe: atlassian/ssh-run:latest
+              variables:
+                SSH_USER: $USER
+                SERVER: $SERVER
+                COMMAND: 'chmod +x /usr/local/bin/deploy.sh'
+      - step:
+          name: Move current app to OLD and replace with new BUILD ZIP
+          deployment: test
+          script:
+            - pipe: atlassian/ssh-run:latest
+              variables:
+                SSH_USER: $USER
+                SERVER: $SERVER
+                COMMAND: 'deploy.sh build-$BITBUCKET_COMMIT build-$BITBUCKET_COMMIT.zip $BUILD_PATH $BITBUCKET_BRANCH'
 definitions:
   services:
     mysql:
