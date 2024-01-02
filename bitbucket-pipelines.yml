@@ -1,4 +1,4 @@
-image: php:8.2
+image: cgsmith105/php:8.2
 
 pipelines:
   branches:
@@ -8,8 +8,6 @@ pipelines:
             - mysql
           name: Test application
           script:
-            - apt-get update && apt-get install -qy git curl libicu-dev unzip zip
-            - docker-php-ext-install intl pdo_mysql
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
             - php -r "file_exists('.env') || copy('.env.example', '.env');"
