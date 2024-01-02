@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\API\V1\AppointmentController;
-use App\Http\Controllers\API\V1\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
