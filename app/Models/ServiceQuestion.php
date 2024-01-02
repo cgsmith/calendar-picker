@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property string $question
- * @property string $hint
+ * @property string|null $hint
  * @property QuestionType $type
- * @property array $type_meta
+ * @property array|null $type_meta
  * @property int $order
  * @property bool $required
  */
@@ -30,6 +30,16 @@ class ServiceQuestion extends Model
         'type_meta' => 'array',
         'type' => QuestionType::class,
     ];
+
+    protected static function booted()
+    {
+        // Set type_meta to null if updating the record and question type does not need meta data
+        static::updating(function (ServiceQuestion $serviceQuestion) {
+            if (in_array($serviceQuestion->type, [QuestionType::text, QuestionType::textarea])) {
+                $serviceQuestion->type_meta = null;
+            }
+        });
+    }
 
     public function service(): BelongsTo
     {

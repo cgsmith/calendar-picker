@@ -1,4 +1,4 @@
-## Appointment Booker
+# Appointment Booker
 
 The appointment booker is based on [Laravel](https://laravel.com/docs) and [Filament](https://filamentphp.com/docs).
 Laravel is the PHP framework and Filament is an admin panel builder for rapid application development. You should take
@@ -9,6 +9,61 @@ application.
 2. `sail up -d` - Runs docker compose and other Laravel functions
 3. `sail artisan migrate:fresh` - Installs db migrations
 4. `sail artisan db:seed` - seeds database with test data
+
+In the `.env` file you will see the `SQS_QUEUE`. This is where appointments will be pushed when they are created. The
+structure of the array of objects follows.
+
+```json
+[
+    {
+        "id": 26,
+        "description": "<ul><li>Did you purchase your bike from Mount7?</li><ul><li>Yes</li></ul><li>Serial Number</li><ul><li>test</li></ul><li>What is wrong with the bike?</li><ul><li>test</li></ul></ul>",
+        "start": "2024-01-30 23:00:00",
+        "end": "2024-01-30 23:00:00",
+        "status": "upcoming",
+        "contact_id": 57,
+        "user_id": 1,
+        "service_id": 1,
+        "created_at": "2023-12-15T15:01:34.000000Z",
+        "updated_at": "2023-12-15T15:01:34.000000Z",
+        "service": {
+            "id": 1,
+            "name": "Workshop Appointment",
+            "description": "<strong>We will repair all bikes!</strong><p>Except fixies</p>",
+            "duration": 1,
+            "all_day": 1,
+            "minimum_cancel_hours": 2,
+            "allow_user_selection": 0,
+            "terms": "<p>We are committed to your privacy. If you'd like to read our <a href=\"https://google.com/\"><span style=\"text-decoration: underline;\">privacy policy</span></a> or <a href=\"https://google.com/\"><span style=\"text-decoration: underline;\">terms</span></a> they are linked here.</p>",
+            "active": true,
+            "created_at": null,
+            "updated_at": "2023-12-14T11:01:25.000000Z"
+        },
+        "user": {
+            "id": 1,
+            "name": "Kailey Johns",
+            "email": "info@mount7.com",
+            "email_verified_at": "2000-10-01T00:00:00.000000Z",
+            "picture": null,
+            "maximum_appointments_per_day": 1,
+            "locale": "en",
+            "created_at": "2023-12-14T11:00:50.000000Z",
+            "updated_at": "2023-12-14T11:00:50.000000Z"
+        },
+        "contact": {
+            "id": 57,
+            "email": "hello@example.com",
+            "name": "Mister Mister",
+            "phone": "myphone",
+            "created_at": "2023-12-15T15:01:34.000000Z",
+            "updated_at": "2023-12-15T15:01:34.000000Z"
+        }
+    }
+]
+
+```
+
+## Deployment
 
 ### Frontend Asset Bundling
 

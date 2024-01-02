@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ServiceTimeType;
 use App\Enums\Status;
+use App\Events\AppointmentCreated;
 use App\Models\Appointment;
 use App\Models\Contact;
 use App\Models\Service;
@@ -157,6 +158,8 @@ class AppointmentController extends Controller
                 'start' => $start,
                 'end' => $end,
             ]);
+
+            AppointmentCreated::dispatch($appointment, $request->questions);
 
             return view('appointment.thankyou', [
                 'appointment' => $appointment,

@@ -19,7 +19,8 @@
         </div>
         <div class="flex">
             <div>
-                <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">What would you like to have the repair done?</h2>
+                <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">When would you like to have the
+                    repair done?</h2>
                 <p class="text-gray-500">This is when the workshop will repair the bike, we would like to have the bike the day before.</p>
                 <input id="datepicker" type="hidden"/>
                 <script>
@@ -28,6 +29,7 @@
                                 '{{ $time->date->format('Y-m-d') }}',
                         @endforeach
                     ]
+                    console.log(allowedDates);
                     const picker = new easepick.create({
                         element: document.getElementById('datepicker'),
                         firstDay: 0,
@@ -48,7 +50,7 @@
                     });
                     picker.on('select', (e) => {
                        const date = new Date(e.detail.date);
-                       const redirectUrl = '{{ url("/appointment/service/{$service->id}/{$userid}") }}/' + date.getTime()/1000 + '/confirm';
+                        const redirectUrl = '{{ route('appt.user',['id' => $service->id, 'userId' => $userid]) }}/time/' + date.getTime() / 1000 + '/confirm';
                        window.location.replace(redirectUrl);
                     });
                 </script>

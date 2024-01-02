@@ -9,6 +9,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property string $description
+ * @property string $start
+ * @property string $end
+ * @property string $status
+ * @property int $contact_id
+ * @property int $user_id
+ * @property int $service_id
+ * @property string $created_at
+ * @property string $updated_at
+ */
 class Appointment extends Model
 {
     use HasFactory;

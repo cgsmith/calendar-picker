@@ -7,17 +7,6 @@ dataset('available_time_check', [
 ]);
 
 describe('available times tests', function () {
-    /*    it('expects a list of available dates', function () {
-            expect(1)->toBe(2);
-        });
-
-        it('expects a list of available times', function () {
-            expect(1)->toBe(2);
-        });
-
-        it('expects no times to return', function () {
-            expect(1)->toBe(2);
-        });*/
     it('checks that available times return', function ($service, $date, $userid, $startDate) {
         $service = \App\Models\Service::find($service);
         $availableDatetimes = \App\Services\AppointmentService::availableDatetimes($service, $userid, $date);

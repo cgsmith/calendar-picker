@@ -31,7 +31,7 @@ class AppointmentService
 
     public static function availableDatetimes(
         Service $service,
-        int  $userid = 0,
+        int $userid = 0,
         ?int $date = null,
         ?int $startDate = null,
     ): array
@@ -73,9 +73,11 @@ class AppointmentService
                         ->where('day_of_week', $startDate->format('w'))
                         ->count();
                     if ($serviceCount > 0) {
+                        $availableDate = Carbon::createFromFormat('Y-m-d', $startDate->format('Y-m-d'));
+                        $availableDate->setTime(0, 0, 0);
                         $availability = new Availability();
                         $availability->user = $userid;
-                        $availability->date = Carbon::createFromFormat('Y-m-d', $startDate->format('Y-m-d'));
+                        $availability->date = $availableDate;
                         $availabilities[] = $availability;
                     }
                 }

@@ -83,10 +83,10 @@ class FormService
         foreach ($question->type_meta as $meta) {
             $checkbox .= '<div class="relative flex gap-x-3">
                   <div class="flex h-6 items-center">
-                    <input id="' . $question->id . '" value="' . $meta . '" name="questions[' . $question->id . ']" type="' . $type . '" ' . self::required($question) . ' class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
+                    <input id="' . $question->id . '-' . $meta . '" value="' . $meta . '" name="questions[' . $question->id . ']" type="' . $type . '" ' . self::required($question) . ' class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
                   </div>
                   <div class="text-sm leading-6">
-                    <label for="' . $question->id . '" class="font-medium text-white">' . $meta . '</label>
+                    <label for="' . $question->id . '-' . $meta . '" class="font-medium text-white">' . $meta . '</label>
                   </div>
                 </div>';
         }

@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\V1\AppointmentController;
+use App\Http\Controllers\API\V1\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'prefix' => 'v1',
+    'middleware' => 'auth:sanctum',
+], function () {
+    // Appointments
+    Route::apiResource('/appointments', AppointmentController::class);
+
 });
+
+Route::get('login', function () {
+})->name('login');
