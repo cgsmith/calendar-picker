@@ -31,7 +31,7 @@ class AppointmentController extends Controller
         $service = Service::where('active', 1)->where('id', $id)->first();
 
         $userCount = $service->users()->count() === 1;
-        if (!$service->allow_user_selection || $userCount) {
+        if (! $service->allow_user_selection || $userCount) {
             $userid = ($userCount) ? $service->users()->first()->id : 0;
 
             return redirect()->action([AppointmentController::class, 'datetimepicker'], [
@@ -55,7 +55,7 @@ class AppointmentController extends Controller
 
         $availableUsers = AppointmentService::availableDatetimes($service, $unixTimestamp);
 
-        $title = $service->name . ' - ' . Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
+        $title = $service->name.' - '.Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
 
         return view('appointment.userpicker', [
             'service' => $service,
@@ -73,7 +73,7 @@ class AppointmentController extends Controller
             userid: $userid,
         );
 
-        $title = $service->name . ' - ' . Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
+        $title = $service->name.' - '.Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
 
         $format = ($unixTimestamp) ? 'H:i' : 'd.m.Y';
 
@@ -122,7 +122,7 @@ class AppointmentController extends Controller
         // Create draft appointment - this will lock in the appointmnet - we can delete drafts after a certain amount of time
         return view('appointment.confirm', [
             'service' => $service,
-            'title' => $service->name . ': ' . __("let's gather a little more information"),
+            'title' => $service->name.': '.__("let's gather a little more information"),
             'userid' => $userid,
             'start' => $start->format('U'),
             'end' => $end->format('U'),

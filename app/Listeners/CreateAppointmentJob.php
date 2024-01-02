@@ -24,7 +24,7 @@ class CreateAppointmentJob
     public function handle(AppointmentCreated $event): void
     {
         $appointment = Appointment::with(['service', 'user', 'contact'])->where('id', $event->appointment->id)->get();
-        \Illuminate\Support\Facades\Queue::pushRaw((string)$appointment);
+        \Illuminate\Support\Facades\Queue::pushRaw((string) $appointment);
         //PushAppointment::dispatch($event->appointment);
     }
 }

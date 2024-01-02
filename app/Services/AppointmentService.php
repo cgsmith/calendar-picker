@@ -34,8 +34,7 @@ class AppointmentService
         int $userid = 0,
         ?int $date = null,
         ?int $startDate = null,
-    ): array
-    {
+    ): array {
         /**
          * 1. If $date is null then we first need to fetch the dates available - not times
          */
@@ -45,7 +44,7 @@ class AppointmentService
         $users = ($userid) ? User::where('id', $userid)->get() : $service->users()->get();
         $maxApptPerDay = $users->sum('maximum_appointments_per_day');
 
-        if (!$startDate) {
+        if (! $startDate) {
             $startDate = Carbon::now();
         } else {
             $startDate = Carbon::createFromTimestamp($startDate);
@@ -56,11 +55,11 @@ class AppointmentService
             // set the startdate ahead the appropriate minimum lookahead
             $startDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
             for ($i = 0;
-                 $i <= app(GeneralSetting::class)->maximum_day_lookahead;
-                 $i++) {
+                $i <= app(GeneralSetting::class)->maximum_day_lookahead;
+                $i++) {
                 $appointmentCount = $service
                     ->appointment()
-                    ->whereRaw('DATE(start) = "' . $startDate->format('Y-m-d') . '"')
+                    ->whereRaw('DATE(start) = "'.$startDate->format('Y-m-d').'"')
                     ->whereIn('user_id', $users->modelKeys())
                     ->count();
 
@@ -93,7 +92,7 @@ class AppointmentService
      */
     public static function buildDescription(Request $request): string
     {
-        if (!$request->has('questions')) {
+        if (! $request->has('questions')) {
             return '';
         }
 
@@ -104,7 +103,7 @@ class AppointmentService
             $description .= "<li>{$question->question}</li><ul><li>{$meta}</li></ul>";
         }
 
-        return $description . '</ul>';
+        return $description.'</ul>';
     }
 
     protected function getAvailableDays()

@@ -28,8 +28,8 @@ class AppointmentFactory extends Factory
 
         /** @var ServiceQuestion $question */
         foreach ($service->questions as $question) {
-            $description .= '<strong>' . $question->question . '</strong><br/>';
-            $description .= fake()->text . '<br/><br/><br/>';
+            $description .= '<strong>'.$question->question.'</strong><br/>';
+            $description .= fake()->text.'<br/><br/><br/>';
         }
 
         return [
