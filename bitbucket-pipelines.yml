@@ -1,4 +1,4 @@
-image: cgsmith105/php:8.2
+image: cgsmith105/php:8.3
 
 pipelines:
   branches:
