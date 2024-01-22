@@ -33,8 +33,9 @@ pipelines:
             - deploy.sh
       - step:
           name: Deploy build with SCP to TEST
+          deployment: Staging
           script:
-            - pipe: atlassian/scp-deploy:1.4.2
+            - pipe: atlassian/scp-deploy:1.5.0
               variables:
                 USER: $USER
                 SERVER: $SERVER
@@ -42,8 +43,9 @@ pipelines:
                 LOCAL_PATH: 'build.zip'
       - step:
           name: Install deploy.sh artifact
+          deployment: Staging
           script:
-            - pipe: atlassian/scp-deploy:1.4.2
+            - pipe: atlassian/scp-deploy:1.5.0
               variables:
                 USER: $USER
                 SERVER: $SERVER
@@ -51,17 +53,18 @@ pipelines:
                 LOCAL_PATH: 'deploy.sh'
       - step:
           name: Set permissions for deploy.sh
+          deployment: Staging
           script:
-            - pipe: atlassian/ssh-run:0.7.1
+            - pipe: atlassian/ssh-run:0.8.0
               variables:
                 SSH_USER: $USER
                 SERVER: $SERVER
                 COMMAND: 'chmod +x /usr/local/bin/deploy.sh'
       - step:
           name: Move current app to OLD and replace with new BUILD ZIP
-          deployment: test
+          deployment: Staging
           script:
-            - pipe: atlassian/ssh-run:0.7.1
+            - pipe: atlassian/ssh-run:0.8.0
               variables:
                 SSH_USER: $USER
                 SERVER: $SERVER
