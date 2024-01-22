@@ -105,7 +105,7 @@ Pipelines runs on pushes to `master`. The pushes are done through a pull request
 If the pipeline fails you can test locally:
 
 ```shell
-docker build --memory=1g --memory-swap=1g -t chris/bbtermin:tag -f my.dockerfile .
+docker build --memory=1g --memory-swap=1g -t chris/bbtermin:tag -f pipelinetest.dockerfile .
 docker run --network=host --name bbmysql -e MYSQL_DATABASE='laravel' -e MYSQL_ROOT_PASSWORD='password' -e MYSQL_ROOT_HOST='%' -e MYSQL_USER='sail' -e MYSQL_PASSWORD='password' -d mysql:8.0
 docker run -it --network=host --memory=4g --memory-swap=4g --memory-swappiness=0 --cpus=4 --entrypoint=/bin/bash chris/bbtermin:tag
 ```
