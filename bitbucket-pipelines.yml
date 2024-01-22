@@ -8,6 +8,12 @@ pipelines:
             - mysql
           name: Test application
           script:
+            - apt install nodejs
+            - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+            - export NVM_DIR="$HOME/.nvm"
+            - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
+            - nvm install 20
+            - npm run build
             - export COMPOSER_ALLOW_SUPERUSER=1
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
