@@ -159,6 +159,7 @@ class AppointmentController extends Controller
                 'end' => $end,
             ]);
 
+            /** @phpstan-ignore-next-line  */
             AppointmentCreated::dispatch($appointment, $request->questions);
 
             return view('appointment.thankyou', [

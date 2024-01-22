@@ -7,6 +7,12 @@ namespace App\Http\Resources\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $phone
+ * @property string $email
+ */
 class ContactResource extends JsonResource
 {
     /**

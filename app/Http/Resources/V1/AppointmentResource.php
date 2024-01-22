@@ -8,6 +8,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property int $id
+ * @property string $start
+ * @property string $end
+ * @property string $description
+ * @property int $created_at
+ * @property int $updated_at
+ *
+ * @method Contact contact()
+ */
 class AppointmentResource extends JsonResource
 {
     public static $wrap = 'appointments';
@@ -29,15 +39,6 @@ class AppointmentResource extends JsonResource
                 'end' => $this->end,
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
-                /*
- * @property int $id
-    * @property string $description
-    * @property string $start
-    * @property string $end
-    * @property string $status
-    * @property int $contact_id
-    * @property int $user_id
-    * @property int $service_id*/
             ],
             'relationships' => [
                 'contact' => ContactResource::make($this->contact()),

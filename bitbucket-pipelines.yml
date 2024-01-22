@@ -15,9 +15,7 @@ pipelines:
             - chmod -R 777 storage bootstrap/cache
             - php artisan migrate:fresh --seed
             - php artisan serve &
-            - ./vendor/bin/pint --test # test code style
-            - ./vendor/bin/phpstan -q # perform statistical analysis
-            - ./vendor/bin/pest #unit tests
+            - composer test
             - composer install --no-dev -o --no-scripts --no-ansi --no-progress -q --prefer-dist
             - rm .env #remove env variable before build
             - zip -q -r build.zip . -x *.git* *tests*
