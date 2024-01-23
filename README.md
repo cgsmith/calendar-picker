@@ -14,7 +14,7 @@ application.
 5. You can access the local system by navigating to http://laravel.test
 
 In the `.env` file you will see the `SQS_QUEUE`. This is where appointments will be pushed when they are created. The
-structure of the array of objects follows.
+structure of the array of objects follows. Don't have a `.env` file? Copy it from [.env.example](./.env.example)!
 
 ```json
 [
@@ -76,9 +76,8 @@ If you are changing the frontend you will need to run `sail npm run dev` to buil
 
 ### Unit Tests
 
-Unit tests are written with [PEST](https://pestphp.com/). Static analysis is done with [PHPStan](https://phpstan.org/).
-You can run both of these commands on the project within `sail` using the command `sail php ./vendor/bin/phpstan &&
-sail php ./vendor/bin/pest`.
+Unit tests are written with [PEST](https://pestphp.com/). Static analysis is done with [PHPStan](https://phpstan.org/). You can run both of these commands
+on the project within `sail` using the command `sail composer test`.
 
 The database should be seeded using `sail artisan db:seed` before running the unit tests as PEST will need this for
 testing against.
@@ -88,6 +87,9 @@ testing against.
 Code styling should follow Laravel code-style, which most IDEs have a setting. Pint is configured to run on builds and
 you should run `sail php ./vendor/bin/pint` before pushing to fix and enforce code styling. You can also run the same
 command with `sail php ./vendor/bin/pint --test` to see if all files adhere to code styling.
+
+
+> Note: Pint will run code styling with `--test` when running `composer test`
 
 PEST is configured to
 enforce [strict types](https://www.php.net/manual/en/language.types.declarations.php#language.types.declarations.strict).
@@ -100,7 +102,7 @@ Each PHP file in the application, dependencies being the exception, should start
 declare(strict_types=1);
 ```
 
-### Bitbucket Pipelines
+### Bitbucket Pipelines for Continuous Deployment
 
 [Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/use-pipes-in-bitbucket-pipelines/) runs on pushes
 to `master`. The pushes are done through a pull request and executes the commmands in `./bitbucket-pipelines.yml`. You 
@@ -116,7 +118,28 @@ _Repository Settings -> Repository Variables_
 | `SSH_PORT`          | 9963                      | Port used for SCP and SSH commands                                                                                |
 | `SSH_DEBUG`         | false                     | Debug the SSH connection by setting to true                                                                       |
 
-If the pipeline fails you can test locally:
+### Process for the Pipeline
+
+1. The pipeline builds the project with npm and composer.
+2. Composer tests are run in the docker container the pipeline has build
+3. Successful builds create two artifacts. One build.zip and the deploy.sh file.
+4. Bitbucket uploads the build.zip and deploy.sh to the `BUILD_PATH` on the remote `SERVER` specified.
+5. Bitbucket then calls `deploy.sh` with the appropriate SHA and branch and your app is deployed! 🚀🚀🚀
+
+### deploy.sh
+
+deploy.sh is a script that is used for the atomic deployments. An atomic deployment simply changes the symlink for the
+webserver and then restarts the webserver after running any database migrations. This process, like all processes, can
+always be improved upon. An atomic deployment allows a server administrator to symlink to a prior version of working
+code as long as they navigate to the correct git SHA and change the symlink. In the future the deploy.sh script could
+probably perform a database backup before a migration is applied.
+
+### Troubleshooting pipeline issues locally
+
+If the pipeline fails you can test locally with Docker. Bitbucket has 
+[decent documentation](https://confluence.atlassian.com/bbkb/troubleshooting-bitbucket-pipelines-1141505226.html)
+for doing this. They also have a link that discusses "Troubleshooting locally with Docker". Below is an example of how
+I was able to troubleshoot the pipeline issues.
 
 ```shell
 docker build --memory=1g --memory-swap=1g -t chris/bbtermin:tag -f my.dockerfile .

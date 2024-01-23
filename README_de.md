@@ -14,7 +14,7 @@ Anwendung vertraut machen.
 5. Sie können auf das lokale System zugreifen, indem Sie zu http://laravel.test navigieren.
 
 In der Datei `.env` sehen Sie die `SQS_QUEUE`. Hierher werden die Termine verschoben, wenn sie erstellt werden. Die
-Struktur des Arrays von Objekten folgt.
+Struktur des Arrays von Objekten folgt. Sie haben keine `.env` Datei? Kopieren Sie sie aus [.env.example](./.env.example)!
 
 
 ```json
@@ -78,8 +78,7 @@ sail npm run build` ausführen, um die Assets für die Umgebung zu erstellen. La
 ### Unit-Tests
 
 Unit-Tests werden mit [PEST](https://pestphp.com/) geschrieben. Die statische Analyse wird mit [PHPStan](https://phpstan.org/) durchgeführt.
-Sie können beide Befehle im Projekt innerhalb von `sail` mit dem Befehl `sail php ./vendor/bin/phpstan &&
-sail php ./vendor/bin/pest`.
+Sie können beide Befehle im Projekt innerhalb von `sail` mit dem Befehl `sail composer test`.
 
 Die Datenbank sollte mit `sail artisan db:seed` gefüllt werden, bevor die Unit-Tests ausgeführt werden, da PEST diese für
 Tests benötigt.
@@ -89,6 +88,8 @@ Tests benötigt.
 Das Code-Styling sollte dem Laravel-Code-Style folgen, für den die meisten IDEs eine Einstellung haben. Pint ist so konfiguriert, dass es auf Builds läuft und
 Sie sollten `sail php ./vendor/bin/pint` vor dem Pushen ausführen, um das Code-Styling zu korrigieren und durchzusetzen. Sie können auch den gleichen
 Befehl mit `sail php ./vendor/bin/pint --test` ausführen, um zu sehen, ob alle Dateien das Code-Styling einhalten.
+
+> Hinweis: Pint führt Code aus, der mit `--test` gestaltet ist, wenn `composer test` ausgeführt wird.
 
 PEST ist so konfiguriert
 strict types](https://www.php.net/manual/en/language.types.declarations.php#language.types.declarations.strict) durchzusetzen.
@@ -101,7 +102,8 @@ Jede PHP-Datei in der Anwendung, mit Ausnahme der Abhängigkeiten, sollte mit
 declare(strict_types=1);
 ```
 
-### Bitbucket Pipelines
+### Bitbucket Pipelines für kontinuierliche Bereitstellung
+
 [Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/use-pipes-in-bitbucket-pipelines/) läuft auf Pushesan `master`.Die Pushes werden durch einen Pull Request durchgeführt und führen die Befehle in `./bitbucket-pipelines.yml` aus. Sie
 können den Status der Pipeline auf [bitbucket.org](https://bitbucket.org/mount7freiburg/termin.mount7.com/pipelines) einsehen. Das
 Bitbucket Repository benötigt die folgenden Variablen, um richtig zu funktionieren. Diese befinden sich unter
@@ -115,7 +117,28 @@ _Repository-Einstellungen -> Repository-Variablen_
 | `SSH_PORT`          | 9963                      | Port, der für SCP- und SSH-Befehle verwendet wird                                                                        |
 | `SSH_DEBUG`         | false                     | Debuggen der SSH-Verbindung durch Setzen auf true                                                                        |
 
-Wenn die Pipeline fehlschlägt, können Sie lokal testen:
+### Prozess für die Pipeline
+
+1. Die Pipeline baut das Projekt mit npm und composer.
+2. Composer-Tests werden in dem Docker-Container ausgeführt, den die Pipeline gebaut hat.
+3. Erfolgreiche Builds erzeugen zwei Artefakte. Eine build.zip und die deploy.sh Datei.
+4. Bitbucket lädt die build.zip und deploy.sh in den `BUILD_PATH` auf dem angegebenen Remote `SERVER` hoch.
+5. Bitbucket ruft dann `deploy.sh` mit dem entsprechenden SHA und Branch auf und Ihre App wird deployed! 🚀🚀🚀
+
+### deploy.sh
+
+deploy.sh ist ein Skript, das für die atomaren Bereitstellungen verwendet wird. Eine atomare Bereitstellung ändert einfach den Symlink für den
+Webserver und startet dann den Webserver neu, nachdem alle Datenbankmigrationen ausgeführt wurden. Dieser Prozess kann, wie alle Prozesse, immer
+immer verbessert werden. Ein atomares Deployment erlaubt es einem Serveradministrator, einen Symlink zu einer früheren Version des funktionierenden
+Code zu verweisen, solange er zum richtigen git SHA navigiert und den Symlink ändert. In Zukunft könnte das deploy.sh-Skript
+wahrscheinlich ein Datenbank-Backup durchführen, bevor eine Migration durchgeführt wird.
+
+### Fehlerbehebung bei Pipeline-Problemen vor Ort
+
+Wenn die Pipeline fehlschlägt, können Sie lokal mit Docker testen. Bitbucket hat
+[anständige Dokumentation](https://confluence.atlassian.com/bbkb/troubleshooting-bitbucket-pipelines-1141505226.html)
+für diesen Vorgang. Sie haben auch einen Link, der die "Fehlerbehebung lokal mit Docker" behandelt. Unten ist ein Beispiel dafür, wie
+Ich war in der Lage, die Pipeline-Probleme zu beheben.
 
 ```shell
 docker build --memory=1g --memory-swap=1g -t chris/bbtermin:tag -f my.dockerfile .

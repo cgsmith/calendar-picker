@@ -49,7 +49,7 @@ pipelines:
               variables:
                 USER: $USER
                 SERVER: $SERVER
-                REMOTE_PATH: '/usr/local/bin/deploy.sh'
+                REMOTE_PATH: '/var/builds/$BUILD_PATH/deploy.sh'
                 LOCAL_PATH: 'deploy.sh'
                 EXTRA_ARGS: ["-P", $SSH_PORT]
                 DEBUG: $SSH_DEBUG
@@ -60,7 +60,7 @@ pipelines:
               variables:
                 SSH_USER: $USER
                 SERVER: $SERVER
-                COMMAND: 'chmod +x /usr/local/bin/deploy.sh'
+                COMMAND: 'chmod +x /var/builds/$BUILD_PATH/deploy.sh'
                 PORT: $SSH_PORT
                 DEBUG: $SSH_DEBUG
       - step:
@@ -70,7 +70,7 @@ pipelines:
               variables:
                 SSH_USER: $USER
                 SERVER: $SERVER
-                COMMAND: 'deploy.sh build-$BITBUCKET_COMMIT build-$BITBUCKET_COMMIT.zip $BUILD_PATH $BITBUCKET_BRANCH'
+                COMMAND: '/var/builds/$BUILD_PATH/deploy.sh build-$BITBUCKET_COMMIT build-$BITBUCKET_COMMIT.zip $BUILD_PATH $BITBUCKET_BRANCH'
                 PORT: $SSH_PORT
                 DEBUG: $SSH_DEBUG
 definitions:
