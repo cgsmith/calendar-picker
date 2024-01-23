@@ -113,6 +113,7 @@ _Repository-Einstellungen -> Repository-Variablen_
 | `BUILD_PATH`        | staging.termin.mount7.com | Der relative Pfad zum Ablegen der ZIP-Datei in `/var/builds/$BUILD_PATH`, der in `bitbucket-pipelines.yml` definiert ist |
 | `SERVER`            | staging.termin.mount7.com | Server, den Bitbucket zum Senden der ZIP-Datei und zum Ausführen von Befehlen verwendet                                  |                                
 | `SSH_PORT`          | 9963                      | Port, der für SCP- und SSH-Befehle verwendet wird                                                                        |
+| `SSH_DEBUG`         | false                     | Debuggen der SSH-Verbindung durch Setzen auf true                                                                        |
 
 Wenn die Pipeline fehlschlägt, können Sie lokal testen:
 

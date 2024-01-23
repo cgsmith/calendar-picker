@@ -114,6 +114,7 @@ _Repository Settings -> Repository Variables_
 | `BUILD_PATH`        | staging.termin.mount7.com | The relative path to drop the ZIP file in `/var/builds/$BUILD_PATH` which is defined in `bitbucket-pipelines.yml` |
 | `SERVER`            | staging.termin.mount7.com | Server Bitbucket will use for sending ZIP file to and executing commands                                          |
 | `SSH_PORT`          | 9963                      | Port used for SCP and SSH commands                                                                                |
+| `SSH_DEBUG`         | false                     | Debug the SSH connection by setting to true                                                                       |
 
 If the pipeline fails you can test locally:
 

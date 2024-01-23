@@ -41,6 +41,7 @@ pipelines:
                 REMOTE_PATH: '/var/builds/$BUILD_PATH/build-$BITBUCKET_COMMIT.zip'
                 LOCAL_PATH: 'build.zip'
                 EXTRA_ARGS: ["-P", $SSH_PORT]
+                DEBUG: $SSH_DEBUG
       - step:
           name: Install deploy.sh artifact
           script:
@@ -51,6 +52,7 @@ pipelines:
                 REMOTE_PATH: '/usr/local/bin/deploy.sh'
                 LOCAL_PATH: 'deploy.sh'
                 EXTRA_ARGS: ["-P", $SSH_PORT]
+                DEBUG: $SSH_DEBUG
       - step:
           name: Set permissions for deploy.sh
           script:
@@ -60,6 +62,7 @@ pipelines:
                 SERVER: $SERVER
                 COMMAND: 'chmod +x /usr/local/bin/deploy.sh'
                 PORT: $SSH_PORT
+                DEBUG: $SSH_DEBUG
       - step:
           name: Move current app to OLD and replace with new BUILD ZIP
           script:
@@ -69,6 +72,7 @@ pipelines:
                 SERVER: $SERVER
                 COMMAND: 'deploy.sh build-$BITBUCKET_COMMIT build-$BITBUCKET_COMMIT.zip $BUILD_PATH $BITBUCKET_BRANCH'
                 PORT: $SSH_PORT
+                DEBUG: $SSH_DEBUG
 definitions:
   services:
     mysql:
