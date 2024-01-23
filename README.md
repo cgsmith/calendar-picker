@@ -1,5 +1,7 @@
 # Appointment Booker
 
+[German Documentation](./README_de.md)
+
 The appointment booker is based on [Laravel](https://laravel.com/docs) and [Filament](https://filamentphp.com/docs).
 Laravel is the PHP framework and Filament is an admin panel builder for rapid application development. You should take
 a moment to familiarize your self with the [directory structure](https://laravel.com/docs/10.x/structure) of a Laravel
@@ -9,6 +11,7 @@ application.
 2. `sail up -d` - Runs docker compose and other Laravel functions
 3. `sail artisan migrate:fresh` - Installs db migrations
 4. `sail artisan db:seed` - seeds database with test data
+5. You can access the local system by navigating to http://laravel.test
 
 In the `.env` file you will see the `SQS_QUEUE`. This is where appointments will be pushed when they are created. The
 structure of the array of objects follows.
@@ -99,8 +102,18 @@ declare(strict_types=1);
 
 ### Bitbucket Pipelines
 
-Pipelines runs on pushes to `master`. The pushes are done through a pull request. You can see the pipeline status on
-[bitbucket.org](https://bitbucket.org/mount7freiburg/termin.mount7.com/pipelines)
+[Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/use-pipes-in-bitbucket-pipelines/) runs on pushes
+to `master`. The pushes are done through a pull request and executes the commmands in `./bitbucket-pipelines.yml`. You 
+can see the pipeline status on [bitbucket.org](https://bitbucket.org/mount7freiburg/termin.mount7.com/pipelines). The 
+Bitbucket Repository will require the following variables setup to work properly. These are located under 
+_Repository Settings -> Repository Variables_ 
+
+| Repository Variable | Setup in Bitbucket        | Description                                                                                                       |
+|---------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `USER`              | mount7                    | Bitbucket uses this user to execute SSH and SCP commands.                                                         |
+| `BUILD_PATH`        | staging.termin.mount7.com | The relative path to drop the ZIP file in `/var/builds/$BUILD_PATH` which is defined in `bitbucket-pipelines.yml` |
+| `SERVER`            | staging.termin.mount7.com | Server Bitbucket will use for sending ZIP file to and executing commands                                          |
+| `SSH_PORT`          | 9963                      | Port used for SCP and SSH commands                                                                                |
 
 If the pipeline fails you can test locally:
 
