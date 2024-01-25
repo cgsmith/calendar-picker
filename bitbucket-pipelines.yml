@@ -25,7 +25,7 @@ pipelines:
             - composer test
             - composer install --no-dev -o --no-scripts --no-ansi --no-progress -q --prefer-dist
             - rm .env #remove env variable before build
-            - zip -q -r build.zip . -x *.git* *tests*
+            - zip -q -r build.zip . -x *.git* *tests* *bootstrap/cache/**
           caches:
             - composer
           artifacts:

@@ -1,3 +1,14 @@
+# MVP
+    
+- Deploy to staging
+- Allow translations and localizations to work
+- Change frontend version to toggle light/dark mode
+- Send email notification when appointment is created
+- Send email notification when appointment is deleted AND in the future
+- Add User profile picture
+- Confirm appointment is sent to queue
+
+
 # Appointment Booker
 
 [German Documentation](./README_de.md)
