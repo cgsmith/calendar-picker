@@ -19,7 +19,7 @@ chown -R www-data:www-data /var/builds/$3
 chmod -R 777 /var/builds/$3/$2/storage /var/builds/$3/$2/bootstrap/cache
 
 # Update SQL
-php /var/www/$3/artisan migrate --no-integration --force || { echo 'failed to update SQL' ; exit 1; }
+php /var/www/$3/artisan migrate --no-interaction --force || { echo 'failed to update SQL' ; exit 1; }
 
 # remove zip file
 rm /var/builds/$3/$2
