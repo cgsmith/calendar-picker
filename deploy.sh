@@ -16,7 +16,7 @@ ln -sf /var/builds/$3/$1 /var/www/$3
 ln -sf /var/builds/$3/.env /var/www/$3/.env
 ln -sf /var/builds/$3/storage/app/public /var/www/$3/storage/app/
 chown -R www-data:www-data /var/builds/$3
-chmod -R 777 /var/builds/$3/$2/storage /var/builds/$3/$2/bootstrap/cache
+chmod -R 777 /var/builds/$3/$1/storage /var/builds/$3/$1/bootstrap/cache
 
 # Update SQL
 php /var/www/$3/artisan migrate --no-interaction --force || { echo 'failed to update SQL' ; exit 1; }

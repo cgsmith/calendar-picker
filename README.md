@@ -18,14 +18,26 @@ Laravel is the PHP framework and Filament is an admin panel builder for rapid ap
 a moment to familiarize your self with the [directory structure](https://laravel.com/docs/10.x/structure) of a Laravel
 application.
 
+You will need `php` and `composer` installed locally. See [Laravel's documentation](https://laravel.com/docs/10.x/sail#configuring-a-shell-alias) for configuring an alias 
+for sail.
+
 1. `php composer install` - Installs dependencies
 2. `sail up -d` - Runs docker compose and other Laravel functions
-3. `sail artisan migrate:fresh` - Installs db migrations
+3. `sail artisan migrate:fresh` - Installs db migrations can be run with `--seed` option
 4. `sail artisan db:seed` - seeds database with test data
 5. You can access the local system by navigating to http://laravel.test
 
+> Note: Don't have a `.env` file? Copy it from [.env.example](./.env.example)!
+
+### Local Setup Troubleshooting steps
+
+##### laravel.test does not work
+
+* Add `laravel.text` to your /etc/hosts file which points to 127.0.0.1
+* If you changed the `APP_PORT` you will need to append that to your request
+
 In the `.env` file you will see the `SQS_QUEUE`. This is where appointments will be pushed when they are created. The
-structure of the array of objects follows. Don't have a `.env` file? Copy it from [.env.example](./.env.example)!
+structure of the array of objects follows.
 
 ```json
 [

@@ -41,11 +41,13 @@
                             '{{asset('css/calendar.css')}}',
 
                         ],
-                        plugins: ['LockPlugin'],
+                        plugins: ['LockPlugin', 'AmpPlugin'],
                         LockPlugin: {
                             filter(date, picked) {
                                 return !allowedDates.includes(date.format('YYYY-MM-DD'));
                             },
+                        },
+                        AmpPlugin: {
                         },
                     });
                     picker.on('select', (e) => {
