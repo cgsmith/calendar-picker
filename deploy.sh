@@ -6,8 +6,10 @@
 # $3 Path to unzip to
 # $4 branch path
 
-echo "Unzipping build $2"
-echo "Deploying for $4"
+echo "1: Commit: $1"
+echo "2: Unzipping build $2"
+echo "3: Folder $3"
+echo "4: Deploying for $4"
 unzip -q -o -d /var/builds/$3/$1/ /var/builds/$3/$2 || { echo 'unzip failed on build' ; exit 1; }
 
 ln -sf /var/builds/$3/$1 /var/www/$3
