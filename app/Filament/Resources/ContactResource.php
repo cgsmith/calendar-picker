@@ -35,17 +35,9 @@ class ContactResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required()
-                    ->autofocus()
-                    ->translateLabel(),
-                TextInput::make('email')
-                    ->required()
-                    ->email()
-                    ->translateLabel(),
-                TextInput::make('phone')
-                    ->tel()
-                    ->translateLabel(),
+                TextInput::make('name')->required()->autofocus(),
+                TextInput::make('email')->required()->email(),
+                TextInput::make('phone')->tel(),
             ]);
     }
 
@@ -53,14 +45,9 @@ class ContactResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->searchable()
-                    ->translateLabel(),
-                TextColumn::make('email')
-                    ->searchable()
-                    ->translateLabel(),
-                TextColumn::make('phone')
-                    ->translateLabel(),
+                TextColumn::make('name')->searchable(),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('phone'),
             ])
             ->filters([
                 //

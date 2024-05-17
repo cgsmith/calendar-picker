@@ -15,16 +15,18 @@ class ManageGeneral extends SettingsPage
 
     protected static string $settings = GeneralSetting::class;
 
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Manage General');
+    }
+
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('minimum_day_lookahead')
-                    ->integer()
-                    ->required(),
-                Forms\Components\TextInput::make('maximum_day_lookahead')
-                    ->integer()
-                    ->required(),
+                Forms\Components\TextInput::make('minimum_day_lookahead')->integer()->required(),
+                Forms\Components\TextInput::make('maximum_day_lookahead')->integer()->required(),
             ]);
     }
 }
