@@ -18,6 +18,7 @@ class AppointmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
+    protected static ?int $navigationSort = 3;
     public static function getModelLabel(): string
     {
         return __('Appointment');

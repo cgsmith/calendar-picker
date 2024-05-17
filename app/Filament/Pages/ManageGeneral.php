@@ -8,13 +8,20 @@ use App\Settings\GeneralSetting;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ManageGeneral extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
 
     protected static string $settings = GeneralSetting::class;
 
+    protected static ?int $navigationSort = 6;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __(parent::getTitle());
+    }
 
     public static function getNavigationLabel(): string
     {
