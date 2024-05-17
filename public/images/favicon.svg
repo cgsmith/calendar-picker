@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1000" height="1000"><rect width="1000" height="1000" rx="350" ry="350" fill="#002e40"></rect><g transform="matrix(38.33515881708652,0,0,38.33515881708652,160.80506551069868,156.5584860842278)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="18" height="18.26"><svg width="18" height="18.26" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient gradientUnits="objectBoundingBox" y2="0.5" x2="1" y1="0.5" id="a">
+            <stop stop-color="#fba44e" offset="0"></stop>
+            <stop stop-color="#d7180c" offset="1"></stop>
+        </linearGradient>
+    </defs>
+    <g id="m7-logo-svg">
+        <g stroke="null" stroke-width="1.25" id="tool">
+            <path stroke="url(#a)" fill="none" id="svg_10" d="m8.37833,11.49997l4.68539,4.68539a2.13133,2.13133 0 0 0 3.01375,-3.01375l-4.72316,-4.72316m-2.97599,3.05153l2.00596,-2.43512c0.25477,-0.30861 0.59471,-0.5031 0.97083,-0.61561m-2.97679,3.05073l-3.74108,4.54314a2.04775,2.04775 0 1 1 -2.88196,-2.88196l5.49469,-4.52465m4.10514,-0.18725c0.44202,-0.1318 0.93467,-0.15109 1.40079,-0.11251a3.61651,3.61651 0 0 0 3.60526,-5.09205l-2.63282,2.63363a2.41423,2.41423 0 0 1 -1.80825,-1.80825l2.63282,-2.63282a3.61651,3.61651 0 0 0 -5.09205,3.60526c0.07313,0.86474 -0.05707,1.8195 -0.72652,2.37083l-0.08197,0.06831m-1.4024,1.15487l-3.30067,-3.30067l-1.13237,0l-1.80825,-3.01375l1.2055,-1.2055l3.01375,1.80825l0,1.13237l3.42363,3.42363m-1.4024,1.15487l1.4024,-1.15487m5.31627,6.59491l-2.10964,-2.10964m-8.74633,2.71238l0.00642,0l0,0.00642l-0.00642,0l0,-0.00642z" stroke-linejoin="round" stroke-linecap="round"></path>
+        </g>
+    </g>
+</svg></svg></g></svg>
