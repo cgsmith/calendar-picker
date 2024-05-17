@@ -27,8 +27,7 @@
                             class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
                             href="/appointment/service/{{$service->id}}/{{$time->date->format('U')}}/{{ $time->user->id }}">
                             {{ $time->user->name }}
-                        </a
-                        ></p>
+                        </a></p>
                 @endforeach
             </div>
 
