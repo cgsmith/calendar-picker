@@ -19,6 +19,7 @@ class AppointmentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     protected static ?int $navigationSort = 3;
+
     public static function getModelLabel(): string
     {
         return __('Appointment');
@@ -71,7 +72,7 @@ class AppointmentResource extends Resource
                     ->preload()
                     ->required(),
                 Forms\Components\RichEditor::make('description')
-                    ->toolbarButtons(['bold', 'italic', 'redo', 'undo',])
+                    ->toolbarButtons(['bold', 'italic', 'redo', 'undo'])
                     ->columnSpanFull()
                     ->required(),
                 Forms\Components\DateTimePicker::make('start')

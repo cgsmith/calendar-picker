@@ -32,7 +32,6 @@ class UserResource extends Resource
         return __('Users');
     }
 
-
     public static function form(Form $form): Form
     {
         return $form
@@ -43,8 +42,7 @@ class UserResource extends Resource
                 EditProfile::getLanguageFormComponent(),
                 Forms\Components\FileUpload::make('picture')
                     ->helperText(__('300px x 300px png is recommended')),
-            ])
-            ;
+            ]);
     }
 
     public static function table(Table $table): Table
