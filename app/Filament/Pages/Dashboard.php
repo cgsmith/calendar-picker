@@ -6,7 +6,6 @@ namespace App\Filament\Pages;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
-
     protected static ?int $navigationSort = 1;
 
     public static function getNavigationLabel(): string

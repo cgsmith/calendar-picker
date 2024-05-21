@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Pages;
 
 use App\Enums\Locale;
@@ -10,10 +12,9 @@ use Filament\Forms\Form;
 
 class EditProfile extends \Filament\Pages\Auth\EditProfile
 {
-
     protected function getRedirectUrl(): ?string
     {
-        return '/admin/profile?lang=' . $this->data['locale'];
+        return '/admin/profile?lang='.$this->data['locale'];
     }
 
     public function form(Form $form): Form
