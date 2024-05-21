@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Filament\Pages\EditProfile;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
@@ -19,6 +20,8 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?int $navigationSort = 3;
+
     public static function getModelLabel(): string
     {
         return __('User');
@@ -29,6 +32,7 @@ class UserResource extends Resource
         return __('Users');
     }
 
+
     public static function form(Form $form): Form
     {
         return $form
@@ -36,11 +40,11 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name'),
                 Forms\Components\TextInput::make('email'),
                 Forms\Components\TextInput::make('maximum_appointments_per_day'),
-                Forms\Components\Select::make('locale')
-                    ->options(config('app.available_locales')),
+                EditProfile::getLanguageFormComponent(),
                 Forms\Components\FileUpload::make('picture')
                     ->helperText(__('300px x 300px png is recommended')),
-            ]);
+            ])
+            ;
     }
 
     public static function table(Table $table): Table

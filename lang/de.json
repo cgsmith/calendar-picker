@@ -1,4 +1,11 @@
 {
+    "Minimum cancel hours": "Mindeststornostunden",
+    "The amount of hours the contact is able to cancel the appointment": "Die Anzahl der Stunden, in denen der Kontakt den Termin absagen kann",
+    "Allow user selection": "Benutzerauswahl zulassen",
+    "All day": "Ganztägig",
+    "Manage General": "Verwalten Allgemein",
+    "Minimum day lookahead": "Minimum-Tagesvorschau",
+    "Maximum day lookahead": "Maximum-Tagesvorschau",
     "Sunday": "Sonnetag",
     "Monday": "Montag",
     "Tuesday": "Dienstag",
@@ -45,5 +52,19 @@
     "upcoming": "bevorstehende",
     "Today": "Heute",
     "Past": "Letzte",
-    "Upcoming": "Bevorstehende"
+    "Upcoming": "Bevorstehende",
+    "We need a little more information to schedule your appointment. All fields are required.": "Um Ihren Termin zu vereinbaren, benötigen wir noch ein paar Informationen. Alle Felder sind erforderlich.",
+    "John Doe": "Max Mustermann",
+    "john@example.com": "max.mustermann@domain.de",
+    "Book Appointment": "Termin buchen",
+    "When would you like to have the repair done?": "Wann möchten Sie die Reparatur durchführen lassen?",
+    "This is when the workshop will repair the bike, we would like to have the bike the day before.": "Das ist der Zeitpunkt, an dem die Werkstatt das Fahrrad reparieren wird, wir möchten das Fahrrad am Vortag haben.",
+    "Thank you! We look forward to meeting with you. We will send you an email with the appointment details. Please contact us if you have any questions.": "Wir danken Ihnen! Wir freuen uns auf ein Treffen mit Ihnen. Wir werden Ihnen eine E-Mail mit den Einzelheiten des Termins schicken. Bitte kontaktieren Sie uns, wenn Sie Fragen haben.",
+    "Appointment Booked!": "Termin reserviert!",
+    "Login": "Anmeldung",
+    "Language": "Sprache",
+    "English": "Englisch",
+    "German": "Deutsch",
+    "Booking Page": "Buchen Seite",
+    "Help": "Hilfe"
 }

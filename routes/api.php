@@ -22,6 +22,3 @@ Route::group([
     Route::apiResource('/appointments', AppointmentController::class);
 
 });
-
-Route::get('login', function () {
-})->name('login');

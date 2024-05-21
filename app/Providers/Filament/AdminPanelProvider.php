@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
+use App\Filament\Pages\EditProfile;
 use App\Http\Middleware\Localization;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -20,7 +23,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -31,13 +33,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->profile()
-            ->plugin(
-                BreezyCore::make()->myProfile()
-                    ->enableSanctumTokens()
-            )
+            ->profile(page: EditProfile::class, isSimple: false)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Slate,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -45,9 +43,26 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                Widgets\AccountWidget::class,
+            ->widgets([Widgets\AccountWidget::class,])
+            ->navigationItems([
+                NavigationItem::make(__('Booking Page'))
+                    ->url('/', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-globe-alt')
+                    ->sort(9),
+                NavigationItem::make(__('Help'))
+                    ->url('https://wiki.mount7.com/books/a-allgemein/page/werkstatt-buchungs-tool', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-question-mark-circle')
+                    ->sort(10),
             ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->url(fn (): string => route('filament.admin.auth.profile'))
+                    ->label(__('Language'))
+                    ->icon('heroicon-o-language'),
+            ])
+            ->favicon(asset('images/favicon.png'))
+            ->brandLogo(asset('images/logo.svg'))
+            ->darkModeBrandLogo(asset('images/logo-dark.svg'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

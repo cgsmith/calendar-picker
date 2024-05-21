@@ -18,6 +18,7 @@ class AppointmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
+    protected static ?int $navigationSort = 3;
     public static function getModelLabel(): string
     {
         return __('Appointment');
@@ -38,17 +39,15 @@ class AppointmentResource extends Resource
                     ->preload()
                     ->required()
                     ->createOptionForm([
-                        Forms\Components\TextInput::make('name')
-                            ->required(),
+                        Forms\Components\TextInput::make('name')->required(),
                         Forms\Components\TextInput::make('email')
-                            ->label('Email address')
+                            ->label(__('Email address'))
                             ->email()
                             ->required(),
                         Forms\Components\TextInput::make('phone')
-                            ->label('Phone number')
+                            ->label(__('Phone number'))
                             ->tel(),
-                    ])
-                    ->translateLabel(),
+                    ]),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->searchable()
@@ -58,39 +57,32 @@ class AppointmentResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->required(),
                         Forms\Components\TextInput::make('email')
-                            ->label('Email address')
+                            ->label(__('Email address'))
                             ->email()
                             ->required(),
                         Forms\Components\TextInput::make('phone')
-                            ->label('Phone number')
+                            ->label(__('Phone number'))
                             ->tel(),
-                    ])
-                    ->translateLabel(),
+                    ]),
                 Forms\Components\Select::make('service_id')
                     ->relationship('service', 'name')
                     ->searchable()
                     ->columnSpanFull()
                     ->preload()
-                    ->required()
-                    ->translateLabel(),
+                    ->required(),
                 Forms\Components\RichEditor::make('description')
-                    ->toolbarButtons([
-                        'bold', 'italic', 'redo', 'undo',
-                    ])
+                    ->toolbarButtons(['bold', 'italic', 'redo', 'undo',])
                     ->columnSpanFull()
-                    ->required()
-                    ->translateLabel(),
+                    ->required(),
                 Forms\Components\DateTimePicker::make('start')
                     ->seconds(false)
                     ->native(false)
-                    ->required()
-                    ->translateLabel(),
+                    ->required(),
                 Forms\Components\DateTimePicker::make('end')
                     ->seconds(false)
                     ->native(false)
                     ->after('start')
-                    ->required()
-                    ->translateLabel(),
+                    ->required(),
             ]);
     }
 
@@ -98,19 +90,11 @@ class AppointmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('contact.name')
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('start')
-                    ->dateTime()
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('end')
-                    ->dateTime()
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('contact.name'),
+                Tables\Columns\TextColumn::make('user.name'),
+                Tables\Columns\TextColumn::make('start')->dateTime(),
+                Tables\Columns\TextColumn::make('end')->dateTime(),
+                Tables\Columns\TextColumn::make('status')->badge(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -118,8 +102,7 @@ class AppointmentResource extends Resource
                         'past' => __('Past'),
                         'today' => __('Today'),
                         'upcoming' => __('Upcoming'),
-                    ])
-                    ->translateLabel(),
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

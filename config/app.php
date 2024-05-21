@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'de',
+    'locale' => env('LOCALE_CONFIG', 'en'),
 
     'available_locales' => ['en', 'de'],
     /*
@@ -97,7 +97,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => env('FALLBACK_LOCALE', 'en'),
 
     /*
     |--------------------------------------------------------------------------

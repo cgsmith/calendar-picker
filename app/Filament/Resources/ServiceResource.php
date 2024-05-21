@@ -19,6 +19,8 @@ class ServiceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
+    protected static ?int $navigationSort = 2;
+
     public static function getModelLabel(): string
     {
         return __('Service');
@@ -35,12 +37,10 @@ class ServiceResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->columnSpanFull()
-                    ->translateLabel(),
+                    ->columnSpanFull(),
                 Forms\Components\RichEditor::make('description')
                     ->required()
                     ->toolbarButtons([
-                        'attachFiles',
                         'bold',
                         'bulletList',
                         'h2',
@@ -50,8 +50,7 @@ class ServiceResource extends Resource
                         'orderedList',
                         'underline',
                     ])
-                    ->fileAttachmentsVisibility('public')
-                    ->translateLabel(),
+                    ->fileAttachmentsVisibility('public'),
                 Forms\Components\RichEditor::make('terms')
                     ->hint(__('Displays as a required checkbox at the end of the appointment form.'))
                     ->toolbarButtons([
@@ -59,8 +58,7 @@ class ServiceResource extends Resource
                         'bulletList',
                         'italic',
                         'link',
-                    ])
-                    ->translateLabel(),
+                    ]),
                 Forms\Components\Toggle::make('allow_user_selection'),
                 Forms\Components\Toggle::make('all_day')
                     ->requiredWith('duration')
@@ -74,14 +72,11 @@ class ServiceResource extends Resource
                     ->helperText(__('Default duration of appointment'))
                     ->required()->hidden(
                         fn ($get): bool => $get('all_day') == true
-                    )
-                    ->translateLabel(),
+                    ),
                 Forms\Components\TextInput::make('minimum_cancel_hours')
                     ->numeric()
-                    ->translateLabel()
                     ->helperText(__('The amount of hours the contact is able to cancel the appointment')),
-                Forms\Components\Toggle::make('active')
-                    ->translateLabel(),
+                Forms\Components\Toggle::make('active'),
             ]);
     }
 
@@ -89,14 +84,10 @@ class ServiceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('duration')
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('minimum_cancel_hours')
-                    ->translateLabel(),
-                Tables\Columns\ToggleColumn::make('active')
-                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('duration'),
+                Tables\Columns\TextColumn::make('minimum_cancel_hours'),
+                Tables\Columns\ToggleColumn::make('active'),
             ])
             ->filters([
                 //

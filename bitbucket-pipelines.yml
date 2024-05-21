@@ -1,5 +1,8 @@
 image: cgsmith105/php:8.3
 
+clone:
+  depth: 1
+
 pipelines:
   branches:
     master:
@@ -25,7 +28,7 @@ pipelines:
             - composer test
             - composer install --no-dev -o --no-scripts --no-ansi --no-progress -q --prefer-dist
             - rm .env #remove env variable before build
-            - zip -q -r build.zip . -x *.git* *tests* *bootstrap/cache/**
+            - zip -q -r build.zip . -x \*.git\* \*tests/\* \*bootstrap/cache/\* \*storage/\* \*node_modules/\**
           caches:
             - composer
           artifacts:

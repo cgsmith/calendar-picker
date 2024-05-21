@@ -19,9 +19,8 @@
         </div>
         <div class="flex">
             <div>
-                <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">When would you like to have the
-                    repair done?</h2>
-                <p class="text-gray-500">This is when the workshop will repair the bike, we would like to have the bike the day before.</p>
+                <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">{{ __('When would you like to have the repair done?')}}</h2>
+                <p class="text-gray-500">{{__('This is when the workshop will repair the bike, we would like to have the bike the day before.')}}</p>
                 <input id="datepicker" type="hidden"/>
                 <script>
                     const allowedDates = [
@@ -41,11 +40,13 @@
                             '{{asset('css/calendar.css')}}',
 
                         ],
-                        plugins: ['LockPlugin'],
+                        plugins: ['LockPlugin', 'AmpPlugin'],
                         LockPlugin: {
                             filter(date, picked) {
                                 return !allowedDates.includes(date.format('YYYY-MM-DD'));
                             },
+                        },
+                        AmpPlugin: {
                         },
                     });
                     picker.on('select', (e) => {

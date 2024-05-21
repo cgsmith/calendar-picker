@@ -18,14 +18,72 @@ Laravel is the PHP framework and Filament is an admin panel builder for rapid ap
 a moment to familiarize your self with the [directory structure](https://laravel.com/docs/10.x/structure) of a Laravel
 application.
 
+You will need `php` and `composer` installed locally. See [Laravel's documentation](https://laravel.com/docs/10.x/sail#configuring-a-shell-alias) for configuring an alias 
+for sail.
+
 1. `php composer install` - Installs dependencies
 2. `sail up -d` - Runs docker compose and other Laravel functions
-3. `sail artisan migrate:fresh` - Installs db migrations
+3. `sail artisan migrate:fresh` - Installs db migrations can be run with `--seed` option
 4. `sail artisan db:seed` - seeds database with test data
 5. You can access the local system by navigating to http://laravel.test
 
+> Note: Don't have a `.env` file? Copy it from [.env.example](./.env.example)!
+
+### Staging server standup
+
+*Assumes you are running a debian based VM. 
+
+1. Spin up a VM or instance
+2. `sudo apt update && sudo apt upgrade`
+3. `sudo apt install unzip`
+4. Open SSH, HTTP, and HTTPS. Limit the port access where required.
+
+**PHP Install**
+
+1. `sudo add-apt-repository ppa:ondrej/php`
+2. `sudo apt update`
+3. `sudo apt install php8.3 php8.3-cli php8.3-{bcmath,common,fpm,curl,mbstring,sqlite3,mysql,intl,xml,zip}`
+
+**Caddy Install**
+
+```
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+sudo usermod -a -G www-data $USER 
+```
+
+1. `sudo vim /etc/caddy/Caddyfile` paste the following in the file
+
+```
+staging.termin.mount7.com {
+        root * /var/www/staging.termin.mount7.com/public
+        encode zstd gzip
+
+        php_fastcgi unix//run/php/php8.3-fpm.sock
+        file_server
+}
+```
+
+**MySQL 8 Config**
+
+1. `sudo apt install mysql-server-8.0`
+2. `sudo mysql`
+3. `CREATE USER 'sail'@'localhost' IDENTIFIED BY 'password';`
+4. `GRANT ALL PRIVILEGES ON * . * TO 'sail'@'localhost';`
+5. `CREATE DATABASE laravel;`
+
+### Local Setup Troubleshooting steps
+
+##### laravel.test does not work
+
+* Add `laravel.text` to your /etc/hosts file which points to 127.0.0.1
+* If you changed the `APP_PORT` you will need to append that to your request
+
 In the `.env` file you will see the `SQS_QUEUE`. This is where appointments will be pushed when they are created. The
-structure of the array of objects follows. Don't have a `.env` file? Copy it from [.env.example](./.env.example)!
+structure of the array of objects follows.
 
 ```json
 [
