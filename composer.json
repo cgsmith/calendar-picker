@@ -61,7 +61,7 @@
             "@php artisan key:generate --ansi"
         ],
         "test": [
-            "@php ./vendor/bin/pint --test",
+            "@php ./vendor/bin/pint --test --config=pint.json",
             "@php ./vendor/bin/phpstan --no-progress --error-format=raw",
             "@php ./vendor/bin/pest"
         ]
