@@ -9,7 +9,7 @@ pipelines:
       - step:
           services:
             - mysql
-          name: Test application
+          name: Test application and Deploy to Production
           script:
             - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
             - export NVM_DIR="$HOME/.nvm"
@@ -26,56 +26,10 @@ pipelines:
             - php artisan migrate:fresh --seed
             - php artisan serve &
             - composer test
-            - composer install --no-dev -o --no-scripts --no-ansi --no-progress -q --prefer-dist
-            - rm .env #remove env variable before build
-            - zip -q -r build.zip . -x \*.git\* \*tests/\* \*bootstrap/cache/\* \*storage/\* \*node_modules/\**
+            - ssh-keyscan $SERVER >> ~/.ssh/known_hosts
+            - php vendor/bin/dep deploy
           caches:
             - composer
-          artifacts:
-            - build.zip
-            - deploy.sh
-      - step:
-          name: Deploy build with SCP to staging.termin.mount7.com
-          script:
-            - pipe: atlassian/scp-deploy:1.5.0
-              variables:
-                USER: $USER
-                SERVER: $SERVER
-                REMOTE_PATH: '/var/builds/$BUILD_PATH/build-$BITBUCKET_COMMIT.zip'
-                LOCAL_PATH: 'build.zip'
-                EXTRA_ARGS: ["-P", $SSH_PORT]
-                DEBUG: $SSH_DEBUG
-      - step:
-          name: Install deploy.sh artifact
-          script:
-            - pipe: atlassian/scp-deploy:1.5.0
-              variables:
-                USER: $USER
-                SERVER: $SERVER
-                REMOTE_PATH: '/var/builds/$BUILD_PATH/deploy.sh'
-                LOCAL_PATH: 'deploy.sh'
-                EXTRA_ARGS: ["-P", $SSH_PORT]
-                DEBUG: $SSH_DEBUG
-      - step:
-          name: Set permissions for deploy.sh
-          script:
-            - pipe: atlassian/ssh-run:0.8.0
-              variables:
-                SSH_USER: $USER
-                SERVER: $SERVER
-                COMMAND: 'chmod +x /var/builds/$BUILD_PATH/deploy.sh'
-                PORT: $SSH_PORT
-                DEBUG: $SSH_DEBUG
-      - step:
-          name: Move current app to OLD and replace with new BUILD ZIP
-          script:
-            - pipe: atlassian/ssh-run:0.8.0
-              variables:
-                SSH_USER: $USER
-                SERVER: $SERVER
-                COMMAND: '/var/builds/$BUILD_PATH/deploy.sh build-$BITBUCKET_COMMIT build-$BITBUCKET_COMMIT.zip $BUILD_PATH $BITBUCKET_BRANCH'
-                PORT: $SSH_PORT
-                DEBUG: $SSH_DEBUG
 definitions:
   services:
     mysql:
