@@ -85,8 +85,6 @@ class ServiceResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('duration'),
-                Tables\Columns\TextColumn::make('minimum_cancel_hours'),
                 Tables\Columns\ToggleColumn::make('active'),
             ])
             ->filters([
