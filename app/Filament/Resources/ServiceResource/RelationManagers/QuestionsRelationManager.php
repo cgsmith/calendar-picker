@@ -36,6 +36,12 @@ class QuestionsRelationManager extends RelationManager
                     ->maxLength(255)
                     ->translateLabel(),
 
+                Forms\Components\TextInput::make('key')
+                    ->hint(__('Used for integrations - not shown to the customer'))
+                    ->columnSpanFull()
+                    ->maxLength(64)
+                    ->translateLabel(),
+
                 Forms\Components\Toggle::make('required')
                     ->columnSpanFull()
                     ->translateLabel(),

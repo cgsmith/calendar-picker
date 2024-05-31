@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Appointment;
+use App\Models\AppointmentMeta;
 use App\Models\Availability;
 use App\Models\Service;
 use App\Models\ServiceQuestion;
@@ -99,11 +100,31 @@ class AppointmentService
         $description = '<ul>';
         foreach ($request->questions as $questionKey => $questionMeta) {
             $question = ServiceQuestion::find($questionKey);
-            $meta = strip_tags($questionMeta);
+            $meta = (!is_null($questionMeta)) ? strip_tags($questionMeta) : 'null';
             $description .= "<li>{$question->question}</li><ul><li>{$meta}</li></ul>";
         }
 
         return $description.'</ul>';
+    }
+
+    public static function buildMetaArray(Request $request): array
+    {
+        $metaArray = [];
+        if (! $request->has('questions')) {
+            return [];
+        }
+
+        foreach ($request->questions as $questionKey => $questionMeta) {
+            $question = ServiceQuestion::find($questionKey);
+            $answer = (!is_null($questionMeta)) ? strip_tags($questionMeta) : 'null';
+
+            $meta = new AppointmentMeta();
+            $meta->key = $question->key;
+            $meta->value = $answer;
+            $metaArray[] = $meta;
+        }
+
+        return $metaArray;
     }
 
     protected function getAvailableDays()

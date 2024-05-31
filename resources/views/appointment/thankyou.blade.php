@@ -5,7 +5,7 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
         <script>
-            var end = Date.now() + (2 * 1000);
+            var end = Date.now() + 1000;
             var colors = ['#4a8fc4', '#FFA500', '#585858'];
 
             (function frame() {

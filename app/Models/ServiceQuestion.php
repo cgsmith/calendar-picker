@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
+ * @property string $key
  * @property string $question
  * @property string|null $hint
  * @property QuestionType $type

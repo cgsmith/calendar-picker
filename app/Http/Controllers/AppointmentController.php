@@ -148,6 +148,7 @@ class AppointmentController extends Controller
 
             // description build out HTML for saving on the appointment
             $description = AppointmentService::buildDescription($request);
+            $metaArray = AppointmentService::buildMetaArray($request);
 
             $appointment = Appointment::create([
                 'contact_id' => $contact->id,
@@ -159,8 +160,10 @@ class AppointmentController extends Controller
                 'end' => $end,
             ]);
 
+            $appointment->meta()->saveMany($metaArray);
+
             /** @phpstan-ignore-next-line  */
-            AppointmentCreated::dispatch($appointment, $request->questions);
+            AppointmentCreated::dispatch($appointment);
 
             return view('appointment.thankyou', [
                 'appointment' => $appointment,
