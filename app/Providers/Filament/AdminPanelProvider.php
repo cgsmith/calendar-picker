@@ -48,7 +48,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationItem::make(__('Booking Page'))
                     ->url('/', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-globe-alt')
-                    ->sort(9),
+                    ->sort(10),
                 NavigationItem::make(__('Help'))
                     ->url('https://wiki.mount7.com/books/a-allgemein/page/werkstatt-buchungs-tool', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-question-mark-circle')
