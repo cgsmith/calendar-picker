@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\Appointment;
 use App\Models\AppointmentMeta;
 use App\Models\Availability;
+use App\Models\Holiday;
 use App\Models\Service;
 use App\Models\ServiceQuestion;
 use App\Models\User;
@@ -58,6 +59,12 @@ class AppointmentService
             for ($i = 0;
                 $i <= app(GeneralSetting::class)->maximum_day_lookahead;
                 $i++) {
+                // check if there is a holiday
+                if (Holiday::where('date', $startDate->format('Y-m-d'))->exists()) {
+                    // skip date
+                    continue;
+                }
+
                 $appointmentCount = $service
                     ->appointment()
                     ->whereRaw('DATE(start) = "'.$startDate->format('Y-m-d').'"')

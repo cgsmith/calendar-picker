@@ -78,4 +78,17 @@ describe('available times tests', function () {
             ->assertRedirect('/service/3/user/0/time/0');
     });
 
+    it('holidays are not in the calendar selection', function() {
+        $service = \App\Models\Service::find(2);
+        $availableDates = \App\Services\AppointmentService::availableDatetimes($service, 0, 0);
+
+        $currentDate = \Carbon\Carbon::now();
+        $currentDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
+        foreach ($availableDates as $availableDate) {
+            expect($availableDate->date->format('Y-m-d'))->toEqual($currentDate->format('Y-m-d'));
+            $currentDate->add('day', 1);
+        }
+
+    });
+
 });
