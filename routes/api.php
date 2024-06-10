@@ -22,5 +22,6 @@ Route::group([
     // Appointments
     Route::apiResource('/appointments', AppointmentController::class);
     Route::post('/holiday', [HolidayController::class, 'create']);
+    Route::delete('/holiday/all', [HolidayController::class, 'destroyAll']);
     Route::delete('/holiday/{date}', [HolidayController::class, 'destroy']);
 });
