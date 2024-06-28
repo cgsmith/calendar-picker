@@ -24,9 +24,6 @@ task('upload', function () {
     upload(__DIR__ . "/", '{{release_path}}');
 });
 
-task('restart-service', function() {
-    run('sudo service laravel-worker restart');
-});
 
 // Hosts
 host('staging.termin.mount7.com')
@@ -49,5 +46,4 @@ host('termin.mount7.com')
 
 // Hooks
 after('deploy:vendors', 'asset-build');
-after('deploy', 'restart-service');
 after('deploy:failed', 'deploy:unlock');
