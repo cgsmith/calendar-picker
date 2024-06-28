@@ -107,7 +107,7 @@ class AppointmentService
         $description = '<ul>';
         foreach ($request->questions as $questionKey => $questionMeta) {
             $question = ServiceQuestion::find($questionKey);
-            $meta = (!is_null($questionMeta)) ? strip_tags($questionMeta) : 'null';
+            $meta = (is_string($questionMeta)) ? strip_tags($questionMeta) : 'null';
             $description .= "<li>{$question->question}</li><ul><li>{$meta}</li></ul>";
         }
 
