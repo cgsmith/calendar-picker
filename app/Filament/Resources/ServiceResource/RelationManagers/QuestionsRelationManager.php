@@ -21,11 +21,9 @@ class QuestionsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('question')
                     ->required()
-                    ->maxLength(255)
-                    ->translateLabel(),
+                    ->maxLength(255),
 
                 Forms\Components\Select::make('type')
-                    ->translateLabel()
                     ->live()
                     ->required()
                     ->options(QuestionType::class),
@@ -33,28 +31,25 @@ class QuestionsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('hint')
                     ->hint(__('Displays below the question to provide additional context'))
                     ->columnSpanFull()
-                    ->maxLength(255)
-                    ->translateLabel(),
+                    ->maxLength(255),
 
                 Forms\Components\TextInput::make('key')
                     ->hint(__('Used for integrations - not shown to the customer'))
                     ->columnSpanFull()
-                    ->maxLength(64)
-                    ->translateLabel(),
+                    ->maxLength(64),
 
                 Forms\Components\Toggle::make('required')
-                    ->columnSpanFull()
-                    ->translateLabel(),
+                    ->columnSpanFull(),
                 Forms\Components\Hidden::make('order')->default(99),
                 Forms\Components\Repeater::make('type_meta')
                     ->columnSpanFull()
                     ->hint(__('These options appear for types: checkbox, dropdown, radio'))
                     ->simple(Forms\Components\TextInput::make('value')
                         ->required(function (Forms\Get $get): bool {
-                            return in_array($get('type'), ['text', 'textarea', '']);
+                            return in_array($get('type'), ['toggle', 'text', 'textarea', '']);
                         }))
                     ->hidden(function (Forms\Get $get): bool {
-                        return in_array($get('type'), ['text', 'textarea', '']);
+                        return in_array($get('type'), ['toggle', 'text', 'textarea', '']);
                     })
                     ->addActionLabel(__('Add Option'))
                     ->reorderableWithButtons(),

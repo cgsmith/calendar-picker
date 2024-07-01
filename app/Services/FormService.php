@@ -28,6 +28,7 @@ class FormService
                 QuestionType::select => self::select($question),
                 QuestionType::checkbox => self::checkbox($question),
                 QuestionType::radio => self::checkbox($question, 'radio'),
+                QuestionType::toggle => self::toggle($question),
             };
         }
 
@@ -71,13 +72,22 @@ class FormService
         return $select;
     }
 
+    public static function toggle(ServiceQuestion $question)
+    {
+        return '<div class="flex items-center justify-between p-8">
+           <span class="flex flex-grow flex-col">
+            <label for="' . $question->id . '" class="block text-sm font-medium leading-6 text-white">' . $question->question . ' ' . self::optional($question) . '</label>
+           </span>
+           <input id="'.$question->id.'" value="1" name="questions['.$question->id.']" type="checkbox" '.self::required($question).' class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
+        </div>';
+    }
+
     public static function checkbox(ServiceQuestion $question, $type = 'checkbox')
     {
         $checkbox = '<div class="mt-10 space-y-10 border-b border-white/10 pb-12">
         <fieldset>
           <legend class="text-sm font-semibold leading-6 text-white"> '.$question->question.' '.self::optional($question).' </legend>
          '.self::hint($question).'
-
           <div class="mt-6 space-y-6">';
 
         foreach ($question->type_meta as $meta) {

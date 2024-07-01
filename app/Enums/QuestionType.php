@@ -11,6 +11,7 @@ enum QuestionType: string implements HasColor, HasLabel
 {
     case text = 'text';
     case textarea = 'textarea';
+    case toggle = 'toggle';
     case select = 'select';
     case checkbox = 'checkbox';
 
@@ -21,6 +22,7 @@ enum QuestionType: string implements HasColor, HasLabel
         return match ($this) {
             self::text => __('Text'),
             self::textarea => __('Text Area'),
+            self::toggle => __('Toggle'),
             self::select => __('Select'),
             self::checkbox => __('Checkbox'),
             self::radio => __('Radio'),
@@ -32,8 +34,8 @@ enum QuestionType: string implements HasColor, HasLabel
         return match ($this) {
             self::text => 'success',
             self::textarea => 'secondary',
+            self::toggle, self::checkbox => 'warning',
             self::select => 'danger',
-            self::checkbox => 'warning',
             self::radio => 'info',
         };
     }
