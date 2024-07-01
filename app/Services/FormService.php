@@ -17,8 +17,8 @@ class FormService
         }
 
         $html = "<div>
-                    <h2 class='text-base font-semibold leading-7 text-white'>".__('A few questions')."</h2>
-                    <p class='mt-1 text-sm leading-6 text-gray-400'>".__('These questions help us during your appointment.').'</p>';
+                    <h2 class='text-base font-semibold leading-7 dark:text-white'>".__('A few questions')."</h2>
+                    <p class='mt-1 text-sm leading-6 text-gray-700 dark:text-gray-400'>".__('These questions help us during your appointment.').'</p>';
 
         /** @var ServiceQuestion $question */
         foreach ($questions as $question) {
@@ -37,9 +37,9 @@ class FormService
 
     public static function text(ServiceQuestion $question, $type = 'text')
     {
-        $html = '<div class="mt-10 col-span-full border-b border-white/10 pb-12">
+        $html = '<div class="mt-10 col-span-full border-b border-black/20 dark:border-white/10 pb-12">
             <label for="'.$question->id.'"
-                   class="block text-sm font-medium leading-6 text-white">'.$question->question.' '.self::optional($question).'</label>
+                   class="block text-sm font-medium leading-6 dark:text-white">'.$question->question.' '.self::optional($question).'</label>
             '.self::hint($question).'
             <div class="mt-2">';
 
@@ -47,10 +47,10 @@ class FormService
             $html .= '<div
                     class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
                     <input type="text" name="questions['.$question->id.']" id="'.$question->id.'" autocomplete="off" '.self::required($question).'
-                           class="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6">
+                           class="flex-1 rounded-md dark:border-0 dark:bg-transparent py-1.5 pl-1 dark:text-white focus:ring-0 sm:text-sm sm:leading-6">
                 </div>';
         } elseif ($type === 'textarea') {
-            $html .= '<textarea id="'.$question->id.'" name="questions['.$question->id.']" '.self::required($question).' rows="3" class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"></textarea>';
+            $html .= '<textarea id="'.$question->id.'" name="questions['.$question->id.']" '.self::required($question).' rows="3" class="block w-full rounded-md border-0 bg-white/5 py-1.5 dark:text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"></textarea>';
         }
 
         return $html.'</div></div>';
@@ -59,13 +59,14 @@ class FormService
     public static function select(ServiceQuestion $question)
     {
         $select = '<div class="sm:col-span-3">
-          <label for="'.$question->id.'" class="block text-sm font-medium leading-6 text-white">'.$question->question.' '.self::optional($question).'</label>
+          <label for="'.$question->id.'" class="block text-sm font-medium leading-6 dark:text-white">'.$question->question.' '.self::optional($question).'</label>
           '.self::hint($question).'
           <div class="mt-2">
-            <select id="'.$question->id.'" name="questions['.$question->id.']" autocomplete="off" '.self::required($question).' class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"><option></option>';
+            <select id="'.$question->id.'" name="questions['.$question->id.']" autocomplete="off" '.self::required($question).' class="block w-full rounded-md dark:border-0 dark:bg-white/5 py-1.5 dark:text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black">
+            <option class="dark:text-white dark:bg-transparent"></option>';
 
         foreach ($question->type_meta as $meta) {
-            $select .= '<option value="'.$meta.'">'.$meta.'</option>';
+            $select .= '<option value="'.$meta.'" class="dark:text-white dark:bg-transparent">'.$meta.'</option>';
         }
         $select .= '</select></div></div>';
 
@@ -74,19 +75,25 @@ class FormService
 
     public static function toggle(ServiceQuestion $question)
     {
-        return '<div class="flex items-center justify-between p-8">
-           <span class="flex flex-grow flex-col">
-            <label for="' . $question->id . '" class="block text-sm font-medium leading-6 text-white">' . $question->question . ' ' . self::optional($question) . '</label>
-           </span>
-           <input id="'.$question->id.'" value="1" name="questions['.$question->id.']" type="checkbox" '.self::required($question).' class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
-        </div>';
+        return '<div class="mt-10 space-y-10 border-b border-white/10 pb-12 flex items-center justify-between">
+                  <span class="flex flex-grow flex-col">
+                    <span class="text-sm font-semibold leading-6 dark:text-white" id="availability-label">' .
+                        $question->question . ' ' . self::optional($question) . '</span>' .
+                        self::hint($question) . '
+                  </span>
+                  <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+                  <button type="button" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="availability-label" aria-describedby="availability-description">
+                    <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+                    <span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+                  </button>
+                </div>';
     }
 
     public static function checkbox(ServiceQuestion $question, $type = 'checkbox')
     {
         $checkbox = '<div class="mt-10 space-y-10 border-b border-white/10 pb-12">
         <fieldset>
-          <legend class="text-sm font-semibold leading-6 text-white"> '.$question->question.' '.self::optional($question).' </legend>
+          <legend class="text-sm font-semibold leading-6 dark:text-white"> '.$question->question.' '.self::optional($question).' </legend>
          '.self::hint($question).'
           <div class="mt-6 space-y-6">';
 
@@ -96,7 +103,7 @@ class FormService
                     <input id="'.$question->id.'-'.$meta.'" value="'.$meta.'" name="questions['.$question->id.']" type="'.$type.'" '.self::required($question).' class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
                   </div>
                   <div class="text-sm leading-6">
-                    <label for="'.$question->id.'-'.$meta.'" class="font-medium text-white">'.$meta.'</label>
+                    <label for="'.$question->id.'-'.$meta.'" class="font-medium dark:text-white">'.$meta.'</label>
                   </div>
                 </div>';
         }
@@ -115,7 +122,7 @@ class FormService
      */
     public static function hint(ServiceQuestion $question)
     {
-        return ($question->hint) ? '<p class="mt-1 text-sm leading-6 text-gray-400">'.$question->hint.'</p>' : '';
+        return ($question->hint) ? '<p class="mt-1 text-sm leading-6 dark:text-gray-400">'.$question->hint.'</p>' : '';
     }
 
     /**
