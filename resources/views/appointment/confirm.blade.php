@@ -16,7 +16,7 @@
                                 <div
                                     class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
                                     <input type="text" name="name" id="name" autocomplete="name" required
-                                           class="flex-1 rounded-md dark:border-0 dark:bg-transparent py-1.5 pl-1 dark:text-white focus:ring-0 sm:text-sm sm:leading-6"
+                                           class="flex-1 rounded-md dark:bg-slate-800 py-1.5 pl-1 dark:text-white focus:ring-0 sm:text-sm sm:leading-6"
                                            placeholder="{{__('John Doe')}}">
                                 </div>
                             </div>
@@ -29,7 +29,7 @@
                                 <div
                                     class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
                                     <input type="email" name="email" id="email" autocomplete="email" required
-                                           class="flex-1 rounded-md dark:border-0 dark:bg-transparent py-1.5 pl-1 dark:text-white focus:ring-0 sm:text-sm sm:leading-6"
+                                           class="flex-1 rounded-md dark:bg-slate-800 py-1.5 pl-1 dark:text-white focus:ring-0 sm:text-sm sm:leading-6"
                                            placeholder="{{__('john@example.com')}}">
                                 </div>
                             </div>
@@ -42,14 +42,12 @@
                                 <div
                                     class="flex rounded-md dark:bg-white/5 ring-1 ring-inset dark:ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
                                     <input type="text" name="phone" id="phone" autocomplete="phone" required
-                                           class="flex-1 rounded-md dark:border-0 dark:bg-transparent py-1.5 pl-1 dark:text-white focus:ring-0 sm:text-sm sm:leading-6">
+                                           class="flex-1 rounded-md dark:bg-slate-800 py-1.5 pl-1 dark:text-white focus:ring-0 sm:text-sm sm:leading-6">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 {!! \App\Services\FormService::render($questions) !!}
 
                 <input type="hidden" name="service_id" value="{{$service->id}}">
@@ -65,11 +63,11 @@
                                 <div class="relative flex gap-x-3">
                                     <div class="flex h-6 items-center">
                                         <input id="terms" value="accepted" name="terms" type="checkbox"
-                                               class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
+                                               class="h-4 w-4 rounded  dark:bg-slate-800 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
                                     </div>
                                     <div class="text-sm leading-6">
                                         <label for="terms"
-                                               class="font-medium text-white">{!! $service->terms !!}</label>
+                                               class="font-medium dark:text-white">{!! $service->terms !!}</label>
                                     </div>
                                 </div>
                             </div>
