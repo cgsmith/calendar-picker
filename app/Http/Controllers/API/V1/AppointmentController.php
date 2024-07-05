@@ -7,6 +7,10 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\AppointmentResource;
 use App\Models\Appointment;
+use App\Models\Contact;
+use App\Models\Service;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -17,9 +21,33 @@ class AppointmentController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'description' => ['required'],
+            'external_id' => 'required',
+            'start' => 'required',
         ]);
 
+        // Fake Contact
+        $contact = new Contact();
+        $contact->name = 'From External';
+        $contact->email = 'no@email.com';
+        $contact->phone = '123';
+        $contact->save();
+
+        $user = User::find(1);
+
+        $service = Service::find(1);
+
+        $date = Carbon::
+
+        $appointment = new Appointment();
+        $appointment->external_id = $request->input('external_id');
+        $appointment->start = $request->input('start');
+        $appointment->end = $request->input('start');
+        $appointment->description = 'Description from external source';
+        $appointment->status = 'upcoming';
+        $appointment->contact()->associate($contact);
+        $appointment->user()->associate($user);
+        $appointment->service()->associate($service);
+        $appointment->save();
     }
 
     /**
@@ -37,7 +65,9 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, Appointment $appointment)
     {
-        //
+        $appointment->update([
+            'external_id' => $request->get('external_id')
+        ]);
     }
 
     /**

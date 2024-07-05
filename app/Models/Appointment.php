@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
+ * @property string $external_id
  * @property string $description
  * @property string $start
  * @property string $end
