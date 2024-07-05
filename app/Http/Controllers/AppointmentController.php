@@ -13,6 +13,7 @@ use App\Models\Service;
 use App\Models\ServiceTimes;
 use App\Models\User;
 use App\Services\AppointmentService;
+use App\Settings\GeneralSetting;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -23,6 +24,7 @@ class AppointmentController extends Controller
     {
         return view('appointment.index', [
             'services' => Service::where('active', 1)->get(),
+            'site_notice' => app(GeneralSetting::class)->site_notice,
         ]);
     }
 

@@ -34,6 +34,15 @@ class ManageGeneral extends SettingsPage
             ->schema([
                 Forms\Components\TextInput::make('minimum_day_lookahead')->integer()->required(),
                 Forms\Components\TextInput::make('maximum_day_lookahead')->integer()->required(),
+                Forms\Components\RichEditor::make('site_notice')
+                    ->columnSpanFull()
+                    ->toolbarButtons([
+                        'bold',
+                        'bulletList',
+                        'italic',
+                        'link',
+                    ])
+                    ->hint(_('The notice here is displayed to users on the main page')),
             ]);
     }
 }

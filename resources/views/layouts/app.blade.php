@@ -133,6 +133,23 @@
     </div>
 
     <div class="max-w-7xl mx-auto p-6 lg:p-8">
+
+        @if (!empty($site_notice))
+            <div class="rounded-md bg-yellow-50 dark:bg-gray-700 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-sm text-yellow-700 dark:text-yellow-400">
+                            {!! $site_notice !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="flex justify-center">
             <a href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 131.964 14.26">
@@ -182,9 +199,9 @@
                     </g>
                 </svg>
             </a>
+
         </div>
         <main>
-
             @yield('content')
         </main>
         <footer class="py-16 text-center text-sm text-black dark:text-white/70">

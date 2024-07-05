@@ -12,6 +12,8 @@ class GeneralSetting extends Settings
 
     public int $maximum_day_lookahead;
 
+    public ?string $site_notice;
+
     public static function group(): string
     {
         return 'general';
