@@ -23,4 +23,5 @@ Route::get('/service/{id}/user/{userId}/time/{unixTimestamp}', [AppointmentContr
     ->name('appt.time');
 Route::get('/service/{id}/user/{userId}/time/{unixTimestamp}/confirm', [AppointmentController::class, 'confirm'])
     ->name('appt.confirm');
-Route::post('/confirm', [AppointmentController::class, 'thankyou']);
+Route::post('/confirm', [AppointmentController::class, 'confirmPost']);
+Route::get('/thank-you', [AppointmentController::class, 'thankyou'])->name('appt.thankyou');

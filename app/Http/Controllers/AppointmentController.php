@@ -132,7 +132,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function thankyou(\Illuminate\Http\Request $request)
+    public function confirmPost(\Illuminate\Http\Request $request)
     {
         if ($request->isMethod('post')) {
             // get form data
@@ -167,9 +167,12 @@ class AppointmentController extends Controller
             /** @phpstan-ignore-next-line  */
             AppointmentCreated::dispatch($appointment);
 
-            return view('appointment.thankyou', [
-                'appointment' => $appointment,
-            ]);
+            return to_route('appt.thankyou');
         }
+    }
+
+    public function thankYou(): View
+    {
+        return view('appointment.thankyou');
     }
 }
