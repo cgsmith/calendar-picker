@@ -77,7 +77,7 @@
                     document.documentElement.setAttribute('data-theme', 'light');
                     break;
             }
-
+            window.dispatchEvent( new Event('storage') );
             updateThemeAndSchemeColor();
         }
 
@@ -189,7 +189,8 @@
         </main>
         <footer class="py-16 text-center text-sm text-black dark:text-white/70">
                 <span class="text-sm text-gray-500 dark:text-gray-400 ">
-                © 2024 <a href="https://mount7.com/" class="hover:underline">Mount7 GmbH</a>. <a href="/admin/login" class="hover:underline">{{ __('Login') }}</a>
+                © {{ date('Y') }} <a href="https://mount7.com/" class="hover:underline">Mount7 GmbH</a><br/><a href="/admin/login"
+                                                                                                 class="hover:underline">{{ __('Login') }}</a>
             </span></footer>
     </div>
 
