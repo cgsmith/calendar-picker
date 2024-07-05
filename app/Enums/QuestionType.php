@@ -14,7 +14,6 @@ enum QuestionType: string implements HasColor, HasLabel
     case toggle = 'toggle';
     case select = 'select';
     case checkbox = 'checkbox';
-
     case radio = 'radio';
 
     public function getLabel(): ?string

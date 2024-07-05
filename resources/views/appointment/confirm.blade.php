@@ -1,3 +1,4 @@
+@php use App\Enums\QuestionType; @endphp
 @extends('layouts/app')
 
 @section('content')
@@ -48,7 +49,35 @@
                         </div>
                     </div>
                 </div>
-                {!! \App\Services\FormService::render($questions) !!}
+                @if(count($questions) > 0)
+                    <div>
+                        <h2 class='text-base font-semibold leading-7 dark:text-white'>{{ __('A few questions') }}</h2>
+                        <p class='mt-1 text-sm leading-6 text-gray-700 dark:text-gray-400'>{{ __('These questions help us during your appointment.') }}</p>
+                        @foreach($questions as $question)
+                            @switch($question->type)
+                                @case(QuestionType::text)
+                                    @include('components.text',['question' => $question])
+                                    @break
+                                @case(QuestionType::textarea)
+                                    @include('components.text',['question' => $question, 'type' => 'textarea'])
+                                    @break
+                                @case(QuestionType::select)
+                                    @include('components.select',['question' => $question])
+                                    @break
+                                @case(QuestionType::checkbox)
+                                    @include('components.checkbox',['question' => $question, 'type' => 'checkbox'])
+                                    @break
+                                @case(QuestionType::radio)
+                                    @include('components.checkbox',['question' => $question, 'type' => 'radio'])
+                                    @break
+                                @case(QuestionType::toggle)
+                                    @include('components.toggle',['question' => $question])
+                                    @break
+                            @endswitch
+                        @endforeach
+                    </div>
+                @endif
+
 
                 <input type="hidden" name="service_id" value="{{$service->id}}">
                 <input type="hidden" name="user_id" value="{{$userid}}">
@@ -62,12 +91,15 @@
                             <div class="space-y-6">
                                 <div class="relative flex gap-x-3">
                                     <div class="flex h-6 items-center">
-                                        <input id="terms" value="accepted" name="terms" type="checkbox"
+                                        <input id="terms"
+                                               required
+                                               value="accepted"
+                                               name="terms"
+                                               type="checkbox"
                                                class="h-4 w-4 rounded  dark:bg-slate-800 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
                                     </div>
                                     <div class="text-sm leading-6">
-                                        <label for="terms"
-                                               class="font-medium dark:text-white">{!! $service->terms !!}</label>
+                                        <label for="terms" class="font-medium dark:text-white">{!! $service->terms !!}</label>
                                     </div>
                                 </div>
                             </div>

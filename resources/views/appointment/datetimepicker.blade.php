@@ -29,8 +29,7 @@
                             @foreach($availableTimes as $time)
                                 '{{ $time->date->format('Y-m-d') }}',
                             @endforeach
-                        ]
-                        console.log(allowedDates);
+                        ];
                         const picker = new easepick.create({
                             element: document.getElementById('datepicker'),
                             firstDay: 0,
