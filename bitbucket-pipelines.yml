@@ -28,11 +28,6 @@ pipelines:
             - composer test
           caches:
             - composer
-      - step:
-          name: Deploy to production
-          trigger: manual
-          script:
-            - vendor/bin/dep deploy
 definitions:
   services:
     mysql:
