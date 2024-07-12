@@ -18,7 +18,5 @@ class AppointmentCreated implements ShouldQueue
     /**
      * Create a new event instance.
      */
-    public function __construct(public Appointment $appointment)
-    {
-    }
+    public function __construct(public Appointment $appointment) {}
 }

@@ -29,9 +29,7 @@ class PushAppointment implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public string $appointment)
-    {
-    }
+    public function __construct(public string $appointment) {}
 
     /**
      * Execute the job.
