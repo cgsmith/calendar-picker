@@ -25,28 +25,35 @@ class AppointmentController extends Controller
             'start' => 'required',
         ]);
 
-        // Fake Contact
-        $contact = new Contact();
-        $contact->name = 'From External';
-        $contact->email = 'no@email.com';
-        $contact->phone = '123';
-        $contact->save();
+        $date = Carbon::parse($request->input('start'));
 
-        $user = User::find(1);
+        /**
+         * Try to find the external_id first to prevent duplicates
+         */
+        if (! $appointment = Appointment::where('external_id', $request->get('external_id'))->first()) {
+            $appointment = new Appointment();
 
-        $service = Service::find(1);
+            // Fake Contact
+            $contact = new Contact();
+            $contact->name = 'From External';
+            $contact->email = 'no@email.com';
+            $contact->phone = '123';
+            $contact->save();
 
-        $date = Carbon::
+            $user = User::find(1);
+            $service = Service::find(1);
 
-        $appointment = new Appointment();
-        $appointment->external_id = $request->input('external_id');
-        $appointment->start = $request->input('start');
-        $appointment->end = $request->input('start');
-        $appointment->description = 'Description from external source';
-        $appointment->status = 'upcoming';
-        $appointment->contact()->associate($contact);
-        $appointment->user()->associate($user);
-        $appointment->service()->associate($service);
+            $appointment->external_id = $request->input('external_id');
+            $appointment->description = 'Description from external source';
+            $appointment->status = 'upcoming';
+            $appointment->contact()->associate($contact);
+            $appointment->user()->associate($user);
+            $appointment->service()->associate($service);
+        }
+
+        $appointment->start = $date->startOfDay()->format('Y-m-d H:i:s');
+        $appointment->end = $date->endOfDay()->format('Y-m-d H:i:s');
+
         $appointment->save();
     }
 
@@ -66,15 +73,7 @@ class AppointmentController extends Controller
     public function update(Request $request, Appointment $appointment)
     {
         $appointment->update([
-            'external_id' => $request->get('external_id')
+            'external_id' => $request->get('external_id'),
         ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Appointment $appointment)
-    {
-        //
     }
 }

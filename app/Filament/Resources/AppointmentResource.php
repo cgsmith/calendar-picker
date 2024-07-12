@@ -7,6 +7,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AppointmentResource\Pages;
 use App\Models\Appointment;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -75,6 +76,7 @@ class AppointmentResource extends Resource
                     ->toolbarButtons(['bold', 'italic', 'redo', 'undo'])
                     ->columnSpanFull()
                     ->required(),
+                TextInput::make('external_id'),
                 Forms\Components\DateTimePicker::make('start')
                     ->seconds(false)
                     ->native(false)
@@ -93,6 +95,7 @@ class AppointmentResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('contact.name'),
                 Tables\Columns\TextColumn::make('user.name'),
+                Tables\Columns\TextColumn::make('external_id'),
                 Tables\Columns\TextColumn::make('start')->dateTime(),
                 Tables\Columns\TextColumn::make('end')->dateTime(),
                 Tables\Columns\TextColumn::make('status')->badge(),

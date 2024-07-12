@@ -1,6 +1,12 @@
 <?php
 
+use App\Models\AppointmentMeta;
+use App\Models\Service;
+use App\Models\ServiceQuestion;
+use App\Services\AppointmentService;
 use App\Settings\GeneralSetting;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 dataset('available_time_check', [
     [1, 0, 1, 1702811876], // 2023-12-17
@@ -8,19 +14,19 @@ dataset('available_time_check', [
 
 describe('available times tests', function () {
     it('checks that available times return', function ($service, $date, $userid, $startDate) {
-        $service = \App\Models\Service::find($service);
-        $availableDatetimes = \App\Services\AppointmentService::availableDatetimes($service, $userid, $date);
+        $service = Service::find($service);
+        $availableDatetimes = AppointmentService::availableDatetimes($service, $userid, $date);
         expect($availableDatetimes)
             ->toBeArray()
             ->toContainOnlyInstancesOf(\App\Models\Availability::class);
     })->with('available_time_check');
 
     it('available times are valid', function ($service, $date, $userid, $startDate) {
-        $service = \App\Models\Service::find($service);
-        $availableDatetimes = \App\Services\AppointmentService::availableDatetimes(
+        $service = Service::find($service);
+        $availableDatetimes = AppointmentService::availableDatetimes(
             service: $service,
-            date: $date,
             userid: $userid,
+            date: $date,
             startDate: $startDate
         );
 
@@ -28,10 +34,10 @@ describe('available times tests', function () {
          * Dec 18 and Dec 20 unvail
          * Other mondays and weds avail
          */
-        $nextMonday = \Carbon\Carbon::parse('December 18 2023'); // unavail
-        $nextWednesday = \Carbon\Carbon::parse('December 20 2023'); // unavail
-        $next2Monday = \Carbon\Carbon::parse('December 25 2023'); // avail
-        $next2Wednesday = \Carbon\Carbon::parse('December 27 2023'); // avail
+        $nextMonday = Carbon::parse('December 18 2023'); // unavail
+        $nextWednesday = Carbon::parse('December 20 2023'); // unavail
+        $next2Monday = Carbon::parse('December 25 2023'); // avail
+        $next2Wednesday = Carbon::parse('December 27 2023'); // avail
 
         /**
          * Not next monday or next weds
@@ -52,10 +58,10 @@ describe('available times tests', function () {
     })->with('available_time_check');
 
     it('calls appropriate model APIs', function () {
-        $service = \App\Models\Service::find(2);
-        $availableDates = \App\Services\AppointmentService::availableDatetimes($service, 0, 0);
+        $service = Service::find(2);
+        $availableDates = AppointmentService::availableDatetimes($service, 0, 0);
 
-        $currentDate = \Carbon\Carbon::now();
+        $currentDate = Carbon::now();
         $currentDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
         foreach ($availableDates as $availableDate) {
             expect($availableDate->date->format('Y-m-d'))->toEqual($currentDate->format('Y-m-d'));
@@ -78,17 +84,47 @@ describe('available times tests', function () {
             ->assertRedirect('/service/3/user/0/time/0');
     });
 
-    it('holidays are not in the calendar selection', function() {
-        $service = \App\Models\Service::find(2);
-        $availableDates = \App\Services\AppointmentService::availableDatetimes($service, 0, 0);
+    it('holidays are not in the calendar selection', function () {
+        $service = Service::find(2);
+        $availableDates = AppointmentService::availableDatetimes($service, 0, 0);
 
-        $currentDate = \Carbon\Carbon::now();
+        $currentDate = Carbon::now();
         $currentDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
         foreach ($availableDates as $availableDate) {
             expect($availableDate->date->format('Y-m-d'))->toEqual($currentDate->format('Y-m-d'));
             $currentDate->add('day', 1);
         }
 
+    });
+
+    it('meta array is set', function () {
+        // Create a fake ServiceQuestion model
+        $fakeServiceQuestion = \Mockery::mock(ServiceQuestion::class);
+        $fakeServiceQuestion->shouldReceive('setAttribute');
+        $fakeServiceQuestion->shouldReceive('find')->andReturn($fakeServiceQuestion);
+
+        // Make key a public property for easier testing
+        $fakeServiceQuestion->key = 'TestKey';
+        $testAnswer = 'this is the value';
+
+        // Swap the existing ServiceQuestion facade instance with our fake
+        $this->app->instance(ServiceQuestion::class, $fakeServiceQuestion);
+
+        $request = Mockery::mock(Request::class);
+        $request->shouldReceive('has')->andReturn([], ['questions' => ['TestKey' => $testAnswer]]);
+        $request->shouldReceive('all')->andReturn([], ['questions' => ['TestKey' => $testAnswer]]);
+        $request->shouldReceive('route')->andReturn(['rtes']);
+        $metaArray = AppointmentService::buildMetaArray($request);
+        expect($metaArray)->toBeArray()->toBeEmpty();
+        /*
+                $metaArray = AppointmentService::buildMetaArray($request);
+                expect($metaArray)
+                    ->toBeArray()
+                    ->and($metaArray[0])
+                    ->toBeInstanceOf(AppointmentMeta::class);
+
+                expect($metaArray[0]->key)->toBe( $fakeServiceQuestion->key);
+                expect($metaArray[0]->value)->toBe( $testAnswer);*/
     });
 
 });

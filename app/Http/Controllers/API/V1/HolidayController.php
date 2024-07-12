@@ -28,6 +28,7 @@ class HolidayController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json(['message' => 'Holiday not created', 'error' => $e->getMessage()], 500);
         }
         DB::commit();

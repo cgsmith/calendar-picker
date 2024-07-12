@@ -71,8 +71,8 @@ class AppointmentController extends Controller
         $service = Service::where('active', 1)->where('id', $id)->first();
         $availableTimes = AppointmentService::availableDatetimes(
             service: $service,
-            date: $unixTimestamp,
             userid: $userid,
+            date: $unixTimestamp,
         );
 
         $title = $service->name.' - '.Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
@@ -148,15 +148,12 @@ class AppointmentController extends Controller
             $start = Carbon::createFromFormat('U', $request->start);
             $end = Carbon::createFromFormat('U', $request->end);
 
-            // description build out HTML for saving on the appointment
-            $description = AppointmentService::buildDescription($request);
             $metaArray = AppointmentService::buildMetaArray($request);
 
             $appointment = Appointment::create([
                 'contact_id' => $contact->id,
                 'service_id' => $service->id,
                 'user_id' => $user->id,
-                'description' => $description,
                 'status' => Status::Upcoming,
                 'start' => $start,
                 'end' => $end,
@@ -164,7 +161,6 @@ class AppointmentController extends Controller
 
             $appointment->meta()->saveMany($metaArray);
 
-            /** @phpstan-ignore-next-line  */
             AppointmentCreated::dispatch($appointment);
 
             return to_route('appt.thankyou');

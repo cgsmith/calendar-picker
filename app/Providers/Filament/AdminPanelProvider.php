@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
-use App\Filament\Pages\EditProfile;
 use App\Http\Middleware\Localization;
-use App\Livewire\AppointmentPersonalInfo;
 use App\Livewire\UserSettingsComponent;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -40,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugin(
                 BreezyCore::make()->myProfile()
                     ->myProfileComponents([
-                        UserSettingsComponent::class
+                        UserSettingsComponent::class,
                     ])
                     ->enableSanctumTokens()
             )

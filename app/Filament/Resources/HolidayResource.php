@@ -29,11 +29,12 @@ class HolidayResource extends Resource
     {
         return __('Holidays');
     }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('date')
+                Forms\Components\DatePicker::make('date'),
             ]);
     }
 
@@ -41,7 +42,7 @@ class HolidayResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('date')
+                Tables\Columns\TextColumn::make('date'),
             ])
             ->filters([
                 //

@@ -7,18 +7,26 @@ namespace App\Livewire;
 use App\Enums\Locale;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Jeffgreco13\FilamentBreezy\Livewire\MyProfileComponent;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 
+/**
+ * @property Form $form
+ */
 class UserSettingsComponent extends MyProfileComponent
 {
     protected string $view = 'livewire.user-settings-component';
+
     public array $data;
+
     public array $only = ['maximum_appointments_per_day', 'locale'];
+
     public $user;
+
     public $userClass;
+
     public static $sort = 11;
 
     public function mount()
@@ -28,6 +36,7 @@ class UserSettingsComponent extends MyProfileComponent
 
         $this->form->fill($this->user->only($this->only));
     }
+
     public function form(Form $form): Form
     {
         return $form
@@ -38,7 +47,7 @@ class UserSettingsComponent extends MyProfileComponent
                     ->label(__('Language'))
                     ->prefixIcon('heroicon-o-language')
                     ->options(Locale::getOptions())
-                    ->required()
+                    ->required(),
             ])
             ->statePath('data');
     }

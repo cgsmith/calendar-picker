@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Guava\FilamentIconPicker\Forms\IconPicker;
 
 class ServiceResource extends Resource
 {
@@ -59,10 +60,11 @@ class ServiceResource extends Resource
                         'italic',
                         'link',
                     ]),
-                Forms\Components\Toggle::make('allow_user_selection'),
+                Forms\Components\Toggle::make('allow_user_selection')->hidden(),
                 Forms\Components\Toggle::make('all_day')
                     ->requiredWith('duration')
                     ->reactive()
+                    ->hidden()
                     ->afterStateUpdated(
                         fn ($state, callable $set) => $state ? $set('duration', null) : $set('duration', 'hidden')
                     ),
@@ -75,8 +77,10 @@ class ServiceResource extends Resource
                     ),
                 Forms\Components\TextInput::make('minimum_cancel_hours')
                     ->numeric()
+                    ->hidden()
                     ->helperText(__('The amount of hours the contact is able to cancel the appointment')),
                 Forms\Components\Toggle::make('active'),
+                IconPicker::make('icon')->columnSpanFull(),
             ]);
     }
 
