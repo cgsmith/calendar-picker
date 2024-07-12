@@ -26,10 +26,13 @@ pipelines:
             - php artisan migrate:fresh --seed
             - php artisan serve &
             - composer test
-            - ssh-keyscan $SERVER >> ~/.ssh/known_hosts
-            - php vendor/bin/dep deploy
           caches:
             - composer
+      - step:
+          name: Deploy to production
+          trigger: manual
+          script:
+            - vendor/bin/dep deploy
 definitions:
   services:
     mysql:
