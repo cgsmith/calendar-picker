@@ -1,9 +1,11 @@
 <?php
 namespace Deployer;
 
+require 'recipe/common.php';
 require 'recipe/laravel.php';
 require 'contrib/sentry.php';
 
+set('dotenv', '{{current_path}}/.env');
 
 // Config
 set('repository', 'git@bitbucket.org:mount7freiburg/termin.mount7.com.git');
@@ -52,7 +54,7 @@ set('sentry', [
     'projects' => [
         'termin-mount7'
     ],
-    'token' => env('SENTRY_API_AUTH_TOKEN')
+    'token' => $_SERVER['SENTRY_API_AUTH_TOKEN']
 ]);
 
 // Hooks
