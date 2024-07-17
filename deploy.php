@@ -2,6 +2,9 @@
 namespace Deployer;
 
 require 'recipe/laravel.php';
+require 'contrib/sentry.php';
+
+
 // Config
 set('repository', 'git@bitbucket.org:mount7freiburg/termin.mount7.com.git');
 
@@ -44,6 +47,15 @@ host('termin.mount7.com')
     ->set('deploy_path', '/home/ahbukvxl/termin.mount7.com')
     ->set('http_user', 'ahbukvxl');
 
+set('sentry', [
+    'organization' => 'mount7-gmbh',
+    'projects' => [
+        'termin-mount7'
+    ],
+    'token' => env('SENTRY_API_AUTH_TOKEN')
+]);
+
 // Hooks
 after('deploy:vendors', 'asset-build');
 after('deploy:failed', 'deploy:unlock');
+after('deploy', 'deploy:sentry');
