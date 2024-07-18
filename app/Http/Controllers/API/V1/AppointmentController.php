@@ -12,6 +12,7 @@ use App\Models\Service;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
@@ -20,30 +21,53 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'external_id' => 'required',
-            'start' => 'required',
-        ]);
+        DB::beginTransaction();
+        try {
+            // validate data
+            $this->validate($request, [
+                '*.external_id' => 'required|max:255',
+                '*.start' => 'required|date|date_format:Y-m-d',
+            ]);
 
-        $date = Carbon::parse($request->input('start'));
+            $json = json_decode($request->getContent());
+            $json = (is_array($json)) ? $json : [$json];
+
+            foreach ($json as $item) {
+                $this->createAppointment($item);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Appointments not created', 'error' => $e->getMessage()], 500);
+        }
+        DB::commit();
+
+        return response()->json(['message' => 'Appointments created', 'data' => count($json)], 201);
+    }
+
+    private function createAppointment($item)
+    {
+        $date = Carbon::parse($item->start);
 
         /**
          * Try to find the external_id first to prevent duplicates
          */
-        if (! $appointment = Appointment::where('external_id', $request->get('external_id'))->first()) {
+        if (! $appointment = Appointment::where('external_id', $item->external_id)->first()) {
             $appointment = new Appointment();
 
-            // Fake Contact
-            $contact = new Contact();
-            $contact->name = 'From External';
-            $contact->email = 'no@email.com';
-            $contact->phone = '123';
-            $contact->save();
+            // Fake Contact find or create
+            if (! $contact = Contact::where('email', 'no@email.com')->first()) {
+                $contact = new Contact();
+                $contact->name = 'From External';
+                $contact->email = 'no@email.com';
+                $contact->phone = '123';
+                $contact->save();
+            }
 
             $user = User::find(1);
             $service = Service::find(1);
 
-            $appointment->external_id = $request->input('external_id');
+            $appointment->external_id = $item->external_id;
             $appointment->description = 'Description from external source';
             $appointment->status = 'upcoming';
             $appointment->contact()->associate($contact);
