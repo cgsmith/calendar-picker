@@ -32,9 +32,9 @@ class AppointmentService
         $maxApptPerDay = $users->sum('maximum_appointments_per_day');
 
         if (! $startDate) {
-            $startDate = Carbon::now();
+            $startDate = Carbon::now(config('app.timezone'));
         } else {
-            $startDate = Carbon::createFromTimestamp($startDate);
+            $startDate = Carbon::createFromTimestamp($startDate, config('app.timezone'));
         }
 
         if ($date) {

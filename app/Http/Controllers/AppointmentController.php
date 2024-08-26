@@ -57,7 +57,7 @@ class AppointmentController extends Controller
 
         $availableUsers = AppointmentService::availableDatetimes($service, $unixTimestamp);
 
-        $title = $service->name.' - '.Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
+        $title = $service->name.' - '.Carbon::createFromTimestamp($unixTimestamp, config('app.timezone'))->format('l M jS');
 
         return view('appointment.userpicker', [
             'service' => $service,
@@ -75,7 +75,7 @@ class AppointmentController extends Controller
             date: $unixTimestamp,
         );
 
-        $title = $service->name.' - '.Carbon::createFromTimestamp($unixTimestamp)->format('l M jS');
+        $title = $service->name.' - '.Carbon::createFromTimestamp($unixTimestamp, config('app.timezone'))->format('l M jS');
 
         $format = ($unixTimestamp) ? 'H:i' : 'd.m.Y';
 
@@ -93,7 +93,7 @@ class AppointmentController extends Controller
     {
         /** @var Service $service */
         $service = Service::where('active', 1)->where('id', $id)->first();
-        $date = Carbon::createFromTimestamp($unixTimestamp);
+        $date = Carbon::createFromTimestamp($unixTimestamp, config('app.timezone'));
         $start = clone $date;
         $end = clone $date;
         if ($service->all_day) {
@@ -114,7 +114,7 @@ class AppointmentController extends Controller
 
             // If dayOfWeek not found (for some reason) just use the current time that was passed through
             if (is_null($dayOfWeekStartTime) || is_null($dayOfWeekEndTime)) {
-                $start = $end = Carbon::createFromTimestamp($unixTimestamp);
+                $start = $end = Carbon::createFromTimestamp($unixTimestamp, config('app.timezone'));
             } else {
                 $start = clone $date->setHour($dayOfWeekStartTime->hour)->setMinute($dayOfWeekStartTime->minute);
                 $end = clone $date->setHour($dayOfWeekEndTime->hour)->setMinute($dayOfWeekEndTime->minute);
