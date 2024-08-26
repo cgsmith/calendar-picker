@@ -195,13 +195,21 @@ _Repository Settings -> Repository Variables_
 4. Bitbucket uploads the build.zip and deploy.sh to the `BUILD_PATH` on the remote `SERVER` specified.
 5. Bitbucket then calls `deploy.sh` with the appropriate SHA and branch and your app is deployed! 🚀🚀🚀
 
-### deploy.sh
+### Deployer
 
-deploy.sh is a script that is used for the atomic deployments. An atomic deployment simply changes the symlink for the
-webserver and then restarts the webserver after running any database migrations. This process, like all processes, can
-always be improved upon. An atomic deployment allows a server administrator to symlink to a prior version of working
-code as long as they navigate to the correct git SHA and change the symlink. In the future the deploy.sh script could
-probably perform a database backup before a migration is applied.
+Deployer is used for the atomic deployments. An atomic deployment simply changes the symlink for the webserver and then 
+restarts the webserver after running any database migrations. This process, like all processes, can always be improved 
+upon. An atomic deployment allows a server administrator to symlink to a prior version of working code as long as they 
+navigate to the correct git SHA and change the symlink. In the future the deploy.sh script could probably perform 
+a database backup before a migration is applied.
+
+Deployer can be run from the command line with a command like below:
+
+```shell
+export SENTRY_API_AUTH_TOKEN=token-here && ./vendor/bin/dep deploy 
+```
+
+The token is provided to the deployer script so releases can be tracked on Sentry.io.
 
 ### Troubleshooting pipeline issues locally
 
