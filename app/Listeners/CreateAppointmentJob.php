@@ -7,6 +7,7 @@ namespace App\Listeners;
 use App\Events\AppointmentCreated;
 use App\Jobs\PushAppointment;
 use App\Models\Appointment;
+use Illuminate\Support\Facades\Queue;
 
 class CreateAppointmentJob
 {
@@ -24,7 +25,6 @@ class CreateAppointmentJob
     public function handle(AppointmentCreated $event): void
     {
         $appointment = Appointment::with(['service', 'user', 'contact', 'meta'])->where('id', $event->appointment->id)->get();
-        \Illuminate\Support\Facades\Queue::pushRaw((string) $appointment);
-        //PushAppointment::dispatch($event->appointment);
+        Queue::pushRaw((string) $appointment);
     }
 }
