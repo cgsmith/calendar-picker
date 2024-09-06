@@ -17,7 +17,8 @@ class BlockIp
     public function __construct()
     {
         // Explode list of IPs into an array and perform a trim on them
-        $allowedIPs = explode(separator: ',', string: getenv('ALLOWED_IPS'));
+        $stringOfIps = (isset($_ENV['ALLOWED_IPS']) && is_string($_ENV['ALLOWED_IPS'])) ? $_ENV['ALLOWED_IPS'] : '';
+        $allowedIPs = explode(separator: ',', string: $stringOfIps);
         array_walk($allowedIPs, function (&$value) {
             $value = str(trim($value));
         });
