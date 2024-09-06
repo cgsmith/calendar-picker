@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\AppointmentMeta;
 use App\Models\Service;
 use App\Models\ServiceQuestion;
 use App\Services\AppointmentService;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Listeners;
 
 use App\Events\AppointmentCreated;
-use App\Jobs\PushAppointment;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Queue;
 

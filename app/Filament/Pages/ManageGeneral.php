@@ -32,8 +32,18 @@ class ManageGeneral extends SettingsPage
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('minimum_day_lookahead')->integer()->required(),
-                Forms\Components\TextInput::make('maximum_day_lookahead')->integer()->required(),
+                Forms\Components\TextInput::make('minimum_day_lookahead')
+                    ->integer()
+                    ->lt('maximum_day_lookahead')
+                    ->minLength(0)
+                    ->maxLength(365)
+                    ->required(),
+                Forms\Components\TextInput::make('maximum_day_lookahead')
+                    ->integer()
+                    ->gt('minimum_day_lookahead')
+                    ->minLength(1)
+                    ->maxLength(365)
+                    ->required(),
                 Forms\Components\RichEditor::make('site_notice')
                     ->columnSpanFull()
                     ->toolbarButtons([

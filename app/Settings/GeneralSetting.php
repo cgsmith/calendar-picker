@@ -14,6 +14,8 @@ class GeneralSetting extends Settings
 
     public ?string $site_notice;
 
+
+
     public static function group(): string
     {
         return 'general';
