@@ -36,6 +36,7 @@ class QuestionsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('key')
                     ->hint(__('Used for integrations - not shown to the customer'))
                     ->columnSpanFull()
+                    ->required()
                     ->maxLength(64),
 
                 Forms\Components\Toggle::make('required')
