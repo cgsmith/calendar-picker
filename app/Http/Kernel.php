@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http;
 
-use App\Http\Middleware\BlockIp;
+use App\Http\Middleware\AllowedIps;
 use App\Http\Middleware\Localization;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -19,7 +19,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
-        BlockIp::class,
+        AllowedIps::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,

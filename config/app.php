@@ -17,6 +17,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Appointment Booking'),
+    'allowed_ips' => env('ALLOWED_IPS', ''),
 
     /*
     |--------------------------------------------------------------------------

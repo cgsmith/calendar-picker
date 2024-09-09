@@ -6,24 +6,27 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
-class BlockIp
+class AllowedIps
 {
     /**
      * Set IP addresses in ALLOWED_IPS env variable
+     * - If empty, all IPs are allowed
      */
-    public array $allowIps = [];
+    public array $ips = [];
 
     public function __construct()
     {
         // Explode list of IPs into an array and perform a trim on them
-        $stringOfIps = (isset($_ENV['ALLOWED_IPS']) && is_string($_ENV['ALLOWED_IPS'])) ? $_ENV['ALLOWED_IPS'] : '';
-        $allowedIPs = explode(separator: ',', string: $stringOfIps);
-        array_walk($allowedIPs, function (&$value) {
-            $value = str(trim($value));
-        });
+        $ips = explode(separator: ',', string: Config::get('app.allowed_ips'));
 
-        $this->allowIps = $allowedIPs;
+        foreach ($ips as $ip) {
+            $trimmedValue = trim($ip);
+            if (! empty($trimmedValue)) {
+                $this->ips[] = str($trimmedValue);
+            }
+        }
     }
 
     /**
@@ -41,7 +44,11 @@ class BlockIp
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! in_array($request->ip(), $this->allowIps)) {
+        if (count($this->ips) === 0) {
+            return $next($request);
+        }
+
+        if (! in_array($request->ip(), $this->ips)) {
             return response()->json([
                 'message' => "You don't have permission to access this page.".$this->addIpToDebug($request),
             ], 401);
