@@ -67,7 +67,7 @@ class AppointmentService
                     if ($serviceCount > 0) {
                         $availableDate = Carbon::createFromFormat('Y-m-d', $startDate->format('Y-m-d'));
                         $availableDate->setTime(0, 0, 0);
-                        $availability = new Availability();
+                        $availability = new Availability;
                         $availability->user = $userid;
                         $availability->date = $availableDate;
                         $availabilities[] = $availability;
@@ -91,7 +91,7 @@ class AppointmentService
             $question = ServiceQuestion::find($questionKey);
             $answer = (! is_null($questionMeta)) ? strip_tags($questionMeta) : 'null';
 
-            $meta = new AppointmentMeta();
+            $meta = new AppointmentMeta;
             $meta->key = $question->key;
             $meta->value = $answer;
             $metaArray[] = $meta;

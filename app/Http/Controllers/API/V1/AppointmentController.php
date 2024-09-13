@@ -53,11 +53,11 @@ class AppointmentController extends Controller
          * Try to find the external_id first to prevent duplicates
          */
         if (! $appointment = Appointment::where('external_id', $item->external_id)->first()) {
-            $appointment = new Appointment();
+            $appointment = new Appointment;
 
             // Fake Contact find or create
             if (! $contact = Contact::where('email', 'no@email.com')->first()) {
-                $contact = new Contact();
+                $contact = new Contact;
                 $contact->name = 'From External';
                 $contact->email = 'no@email.com';
                 $contact->phone = '123';

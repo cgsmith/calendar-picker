@@ -38,7 +38,7 @@ class HolidayController extends Controller
 
     public function createHoliday($date)
     {
-        $holiday = new Holiday();
+        $holiday = new Holiday;
         $holiday->date = $date;
 
         $holiday->save();

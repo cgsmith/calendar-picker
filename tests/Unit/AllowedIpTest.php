@@ -12,7 +12,7 @@ describe('ensure .env is string for allow ip middleware', function () {
             ->with('app.allowed_ips')
             ->andReturn('127.0.0.1');
 
-        $allowIpsMiddleware = new AllowedIps();
+        $allowIpsMiddleware = new AllowedIps;
         expect($allowIpsMiddleware->ips)
             ->toBeArray();
     });
@@ -23,7 +23,7 @@ describe('ensure .env is string for allow ip middleware', function () {
             ->with('app.allowed_ips')
             ->andReturn('');
 
-        $allowIpsMiddleware = new AllowedIps();
+        $allowIpsMiddleware = new AllowedIps;
         expect($allowIpsMiddleware->ips)
             ->toBeArray()
             ->toBeEmpty();
