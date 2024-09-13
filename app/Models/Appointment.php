@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\Status;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -25,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Appointment extends Model
 {
-    use HasFactory;
+    use HasFactory, Prunable;
 
     protected $casts = [
         'status' => Status::class,
@@ -49,5 +51,10 @@ class Appointment extends Model
     public function meta(): HasMany
     {
         return $this->hasMany(AppointmentMeta::class);
+    }
+
+    public function prunable(): Builder
+    {
+        return static::where('end', '<', now());
     }
 }
