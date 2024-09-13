@@ -61,7 +61,8 @@ class ContactResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated([10, 25, 50, 100]);
     }
 
     public static function getRelations(): array
