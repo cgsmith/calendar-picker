@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
+ * @property int $parent_service_question_id if set this is the child of the parent when the parent item is true
  * @property string $key
  * @property string $question
  * @property string|null $hint
@@ -46,4 +47,10 @@ class ServiceQuestion extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(ServiceQuestion::class, 'parent_service_question_id');
+    }
+
 }

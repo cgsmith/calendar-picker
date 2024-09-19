@@ -30,6 +30,8 @@ class Service extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(ServiceQuestion::class)
+            ->orderByRaw('COALESCE(parent_service_question_id, id)')
+            ->orderByRaw('CASE WHEN parent_service_question_id IS NULL THEN 0 ELSE 1 END')
             ->orderBy('order');
     }
 

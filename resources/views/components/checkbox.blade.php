@@ -7,6 +7,7 @@
                                value="{{$meta}}"
                                name="questions[{{$question->id}}]"
                                type="{{$type}}"
+                               onclick="toggleChildren({{$question->id}})"
                                {{ ($question->required) ? 'required' : '' }}
                                class="h-4 w-4 rounded dark:bg-slate-800 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900">
                     </div>
