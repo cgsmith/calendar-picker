@@ -41,6 +41,7 @@ class QuestionsRelationManager extends RelationManager
                     ->hint(__('This question is displayed when the parent question is checked or toggled on'))
                     ->options(ServiceQuestion::query()
                         // restrict by owner record
+                        /** @phpstan-ignore-next-line */
                         ->where('service_id', '=', $this->getOwnerRecord()->id)
                         ->whereNull('parent_service_question_id') // child can only be tied to one parent
                         ->whereIn('type', ['toggle']) // parent can only be toggle
@@ -76,7 +77,7 @@ class QuestionsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('parent_service_question_id')
                     ->name('')
                     ->getStateUsing(function (ServiceQuestion $question) {
-                       return ($question->parent_service_question_id != null) ? 'child' : '';
+                        return ($question->parent_service_question_id != null) ? 'child' : '';
                     })->badge(),
                 Tables\Columns\TextColumn::make('question'),
                 Tables\Columns\TextColumn::make('type')->badge(),

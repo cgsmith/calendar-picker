@@ -52,5 +52,4 @@ class ServiceQuestion extends Model
     {
         return $this->belongsTo(ServiceQuestion::class, 'parent_service_question_id');
     }
-
 }
