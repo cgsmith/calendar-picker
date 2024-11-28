@@ -71,7 +71,7 @@
     "A few questions": "Ein paar Fragen",
     "These questions help us during your appointment.": "Diese Fragen helfen uns bei Ihrem Termin.",
     "Displays as a required checkbox at the end of the appointment form.": "Wird als erforderliches Kontrollkästchen am Ende des Terminformulars angezeigt.",
-    "(optional)": "(fakultativ)",
+    "(optional)": "(optional)",
     "This question is displayed when the parent question is checked or toggled on": "Diese Frage wird angezeigt, wenn die übergeordnete Frage markiert oder eingeschaltet ist",
     "Parent Question": "Elternfrage"
 }
