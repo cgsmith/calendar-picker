@@ -46,6 +46,9 @@ class AppointmentService
                 $i++) {
                 // check if there is a holiday
                 if (Holiday::where('date', $startDate->format('Y-m-d'))->exists()) {
+                    // @todo requires a Unit test
+                    $startDate->add('day', 1);
+
                     // skip date
                     continue;
                 }
