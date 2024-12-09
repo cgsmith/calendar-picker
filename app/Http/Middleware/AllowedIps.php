@@ -13,6 +13,8 @@ class AllowedIps
     /**
      * Set IP addresses in ALLOWED_IPS env variable
      * - If empty, all IPs are allowed
+     *
+     * @var array<string|\Stringable>
      */
     public array $ips = [];
 

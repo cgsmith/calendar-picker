@@ -20,6 +20,7 @@ class ManageGeneral extends SettingsPage
 
     public function getTitle(): string|Htmlable
     {
+        /** @phpstan-ignore argument.type */
         return __(parent::getTitle());
     }
 

@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 
 class AppointmentService
 {
+    /**
+     * @return array<Availability>
+     */
     public static function availableDatetimes(
         Service $service,
         int $userid = 0,
@@ -46,7 +49,6 @@ class AppointmentService
                 $i++) {
                 // check if there is a holiday
                 if (Holiday::where('date', $startDate->format('Y-m-d'))->exists()) {
-                    // @todo requires a Unit test
                     $startDate->add('day', 1);
 
                     // skip date
@@ -83,6 +85,9 @@ class AppointmentService
         return $availabilities;
     }
 
+    /**
+     * @return array<AppointmentMeta>
+     */
     public static function buildMetaArray(Request $request): array
     {
         $metaArray = [];
@@ -91,6 +96,7 @@ class AppointmentService
         }
 
         foreach ($request->questions as $questionKey => $questionMeta) {
+            /** @var ServiceQuestion $question */
             $question = ServiceQuestion::find($questionKey);
             $answer = (! is_null($questionMeta)) ? strip_tags($questionMeta) : 'null';
 

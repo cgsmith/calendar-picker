@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Enums\Locale;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,16 +20,24 @@ class UserSettingsComponent extends MyProfileComponent
 {
     protected string $view = 'livewire.user-settings-component';
 
+    /**
+     * @var array<string, string> key value pair of settings
+     */
     public array $data;
 
+    /** @var array<string> */
     public array $only = ['maximum_appointments_per_day', 'locale'];
 
-    public $user;
+    public User $user;
 
-    public $userClass;
+    public string|false $userClass;
 
+    /** @var int */
     public static $sort = 11;
 
+    /**
+     * @return void
+     */
     public function mount()
     {
         $this->user = Filament::getCurrentPanel()->auth()->user();

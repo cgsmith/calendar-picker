@@ -10,6 +10,9 @@ class Locale
 
     const DE = 'de';
 
+    /**
+     * @return array<string, string>
+     */
     public static function getOptions(): array
     {
         return [

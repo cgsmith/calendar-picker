@@ -20,6 +20,9 @@ use Illuminate\View\View;
 
 class AppointmentController extends Controller
 {
+    /**
+     * Index of the appointment controller
+     */
     public function index(): View
     {
         return view('appointment.index', [
@@ -28,12 +31,16 @@ class AppointmentController extends Controller
         ]);
     }
 
+    /**
+     * After a service is selected we show the appointments available for selection
+     */
     public function service(int $id, int $unixTimestamp = 0): View|RedirectResponse
     {
         $service = Service::where('active', 1)->where('id', $id)->first();
 
         $userCount = $service->users()->count() === 1;
         if (! $service->allow_user_selection || $userCount) {
+            /** @phpstan-ignore property.notFound */
             $userid = ($userCount) ? $service->users()->first()->id : 0;
 
             return redirect()->action([AppointmentController::class, 'datetimepicker'], [
@@ -51,6 +58,11 @@ class AppointmentController extends Controller
         ]);
     }
 
+    /**
+     * If there is a user to be picked then we should display that to the customer
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     */
     public function userpicker(int $id, int $unixTimestamp)
     {
         $service = Service::where('active', 1)->where('id', $id)->first();
@@ -66,6 +78,11 @@ class AppointmentController extends Controller
         ]);
     }
 
+    /**
+     * Render date time picker for user to choose a selection
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     */
     public function datetimepicker(int $id, int $userid, int $unixTimestamp = 0)
     {
         $service = Service::where('active', 1)->where('id', $id)->first();
@@ -81,6 +98,7 @@ class AppointmentController extends Controller
 
         return view('appointment.datetimepicker', [
             'service' => $service,
+            /** @phpstan-ignore property.notFound */
             'userid' => $service->users()->first()->id,
             'availableTimes' => $availableTimes,
             'title' => $title,
@@ -89,6 +107,11 @@ class AppointmentController extends Controller
         ]);
     }
 
+    /**
+     * Confirm the appointment and save to the datastore
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     */
     public function confirm(int $id, int $userid, int $unixTimestamp)
     {
         /** @var Service $service */
@@ -132,6 +155,11 @@ class AppointmentController extends Controller
         ]);
     }
 
+    /**
+     * Confirmation post of the form
+     *
+     * @return RedirectResponse|void
+     */
     public function confirmPost(\Illuminate\Http\Request $request)
     {
         if ($request->isMethod('post')) {
@@ -152,7 +180,9 @@ class AppointmentController extends Controller
 
             $appointment = Appointment::create([
                 'contact_id' => $contact->id,
+                /** @phpstan-ignore property.notFound */
                 'service_id' => $service->id,
+                /** @phpstan-ignore property.notFound */
                 'user_id' => $user->id,
                 'status' => Status::Upcoming,
                 'start' => $start,
@@ -167,6 +197,9 @@ class AppointmentController extends Controller
         }
     }
 
+    /**
+     * Thank you page 🎉
+     */
     public function thankYou(): View
     {
         return view('appointment.thankyou');

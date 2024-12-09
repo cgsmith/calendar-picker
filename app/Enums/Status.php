@@ -13,7 +13,7 @@ enum Status: string implements HasColor, HasLabel
     case Today = 'today';
     case Upcoming = 'upcoming';
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Past => __('Past'),
@@ -22,7 +22,7 @@ enum Status: string implements HasColor, HasLabel
         };
     }
 
-    public function getColor(): string|array|null
+    public function getColor(): string
     {
         return match ($this) {
             self::Past => 'gray',

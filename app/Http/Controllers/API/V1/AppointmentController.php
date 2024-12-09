@@ -18,6 +18,8 @@ class AppointmentController extends Controller
 {
     /**
      * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -45,6 +47,12 @@ class AppointmentController extends Controller
         return response()->json(['message' => 'Appointments created', 'data' => count($json)], 201);
     }
 
+    /**
+     * Create appointment via API
+     *
+     * @param  Appointment  $item
+     * @return void
+     */
     private function createAppointment($item)
     {
         $date = Carbon::parse($item->start);
@@ -83,6 +91,8 @@ class AppointmentController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Appointment $appointment)
     {
@@ -93,6 +103,8 @@ class AppointmentController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @return void
      */
     public function update(Request $request, Appointment $appointment)
     {

@@ -5,6 +5,7 @@
 use App\Http\Middleware\AllowedIps;
 use Illuminate\Support\Facades\Config;
 
+covers(AllowedIps::class);
 describe('ensure .env is string for allow ip middleware', function () {
     it('check complete .env does not crash app', function () {
         Config::shouldReceive('get')

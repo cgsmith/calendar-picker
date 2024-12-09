@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $question
  * @property string|null $hint
  * @property QuestionType $type
- * @property array|null $type_meta
+ * @property array<string>|null $type_meta
  * @property int $order
  * @property bool $required
  */

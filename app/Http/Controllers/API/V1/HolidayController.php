@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\DB;
 
 class HolidayController extends Controller
 {
+    /** @var array<string|Holiday> */
     public array $dataSaved = [];
 
     /**
      * Display the specified resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
     {
@@ -36,6 +39,10 @@ class HolidayController extends Controller
         return response()->json(['message' => 'Holiday created', 'data' => $this->dataSaved], 201);
     }
 
+    /**
+     * @param  string  $date  YYYY-mm-dd format
+     * @return void
+     */
     public function createHoliday($date)
     {
         $holiday = new Holiday;
@@ -47,6 +54,9 @@ class HolidayController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  string  $date  YYYY-mm-dd format
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $date)
     {
@@ -66,6 +76,11 @@ class HolidayController extends Controller
         }
     }
 
+    /**
+     * Delete all of the holidays via the API.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroyAll(Request $request)
     {
         $holidays = Holiday::all();

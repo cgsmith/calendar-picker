@@ -11,7 +11,7 @@ enum ServiceTimeType: int implements HasLabel
     case Start = 0;
     case End = 1;
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Start => __('Start'),

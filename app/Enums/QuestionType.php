@@ -16,7 +16,7 @@ enum QuestionType: string implements HasColor, HasLabel
     case checkbox = 'checkbox';
     case radio = 'radio';
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::text => __('Text'),
@@ -28,7 +28,7 @@ enum QuestionType: string implements HasColor, HasLabel
         };
     }
 
-    public function getColor(): string|array|null
+    public function getColor(): string
     {
         return match ($this) {
             self::text => 'success',

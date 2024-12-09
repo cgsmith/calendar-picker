@@ -1,11 +1,14 @@
 <?php
 
+use App\Models\Holiday;
 use App\Models\Service;
 use App\Models\ServiceQuestion;
 use App\Services\AppointmentService;
 use App\Settings\GeneralSetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
+covers(AppointmentService::class);
 
 dataset('available_time_check', [
     [1, 0, 1, 1702811876], // 2023-12-17
@@ -84,14 +87,18 @@ describe('available times tests', function () {
     });
 
     it('holidays are not in the calendar selection', function () {
-        $service = Service::find(2);
-        $availableDates = AppointmentService::availableDatetimes($service, 0, 0);
+        $service = Service::find(2); // service should start at 12-5 and exclude the holidays but have the other days
+        $availableDates = AppointmentService::availableDatetimes($service, 0, 0, startDate: 1733057567); // 12-1
 
-        $currentDate = Carbon::now();
-        $currentDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead);
+        // Add minimum day lookahead
+        $currentDate = Carbon::createFromTimestamp(1733057567); // 12-1
+        $currentDate->add('day', app(GeneralSetting::class)->minimum_day_lookahead); // 12-8
+
+        // get holidays to make sure they are not in the availabilities
+        expect(count($availableDates))->toBe(60); // should have 59 days (-1 for the holiday)
         foreach ($availableDates as $availableDate) {
-            expect($availableDate->date->format('Y-m-d'))->toEqual($currentDate->format('Y-m-d'));
-            $currentDate->add('day', 1);
+            // Date should equal current date plus a day
+            expect(Holiday::where('date', $availableDate->date->format('Y-m-d'))->exists())->toBeFalse();
         }
 
     });

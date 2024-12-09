@@ -22,6 +22,9 @@ class AppointmentCollection extends ResourceCollection
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function with(Request $request)
     {
         return [
